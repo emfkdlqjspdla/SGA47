@@ -6,6 +6,7 @@
 #include <ctime> // time, clock
 #include <windows.h>
 #include <iomanip>
+#include <list>
 
 using namespace std;
 
@@ -26,6 +27,32 @@ struct Point
 	{}
 };
 
+struct mover
+{
+	enum dir_id
+	{
+		LEFT,
+		UP,
+		RIGHT,
+		DOWN,
+	};
+
+	mover(const char& c, const Point& pt, const int& dir = LEFT)
+		: mark(c), pos(pt), direction(dir)
+	{}
+
+	Point follow(const Point& newpt)
+	{
+		Point prev = pos;
+
+		pos = newpt;
+
+		return prev;
+	}
+	char mark;
+	Point pos;
+	int direction;
+};
 
 class game
 {
@@ -38,11 +65,11 @@ class game
 	};
 
 public :
-	game(const int& w = 70, const int& h = 20)
+	game(const int& w = 30, const int& h = 10)
 		: width(w), height(h)
-		, blank('-'), mark('@'), border('#'), meat('$')
+		, blank('-'), border('#'), meat('$')
 		, need_to_update(true), need_to_draw(true), meat_exist(false)
-		, myPoint(width/2, height/2), myMeat()
+		, snake('@', Point(width/2, height/2)), myMeat()
 		, meat_count(0), bordersize(1), mp_index(0)
 		, board(NULL), meat_position(NULL)
 		, speed(1.f), update_dt(0)
@@ -95,37 +122,19 @@ public :
 			}
 			else if (key == 'a' || key == 'A')
 			{
-				direction = LEFT;
-				//if (myPoint.x - 1 < bordersize)
-				//	return true;
-
-				//myPoint.x--;
+				snake.direction = LEFT;
 			}
 			else if (key == 'd' || key == 'D')
 			{
-				direction = RIGHT;
-				//if (myPoint.x + 1 >= width - bordersize)
-				//	return true;
-
-				//myPoint.x++;
+				snake.direction = RIGHT;
 			}
 			else if (key == 'w' || key == 'W')
 			{
-				direction = UP;
-
-				//if (myPoint.y - 1 < bordersize)
-				//	return true;
-
-				//myPoint.y--;
+				snake.direction = UP;
 			}
 			else if (key == 's' || key == 'S')
 			{
-				direction = DOWN;
-
-				//if (myPoint.y + 1 >= height - bordersize)
-				//	return true;
-
-				//myPoint.y++;
+				snake.direction = DOWN;
 			}
 			else if (key == '+')
 			{
@@ -145,71 +154,126 @@ public :
 
 			update_dt = update_dt - (count/speed)*1000;
 
-			// 4-1. 먹었는지 안먹었는지 확인
-			if (myPoint.x == myMeat.x && myPoint.y == myMeat.y)
+			for (int i = 0; i < count; i++)
 			{
-				meat_exist = false;
-				meat_count++;
-
-				speed = speed + 0.1f;
-			}
-
-			if (direction == LEFT)
-			{
-				myPoint.x -= 1;
-			}
-			else if (direction == UP)
-			{
-				myPoint.y -= 1;
-			}
-			else if (direction == RIGHT)
-			{
-				myPoint.x += 1;
-			}
-			else if (direction == DOWN)
-			{
-				myPoint.y += 1;
-			}
-
-			// todo update.
-			for (int y = 0; y < height; y++)
-			{
-				for (int x = 0; x < width; x++)
+				// 4-1. 먹었는지 안먹었는지 확인
+				if (snake.pos.x == myMeat.x && snake.pos.y == myMeat.y)
 				{
-					if (x < bordersize || y < bordersize ||
-						x >= width-bordersize || y >= height-bordersize)
-						board[x + y*width] = border;
-					else if (myPoint.x == x && myPoint.y == y)
-						board[x + y*width] = mark;
-					else if (myMeat.x == x && myMeat.y == y)
-						board[x + y*width] = meat;
-					else
-						board[x + y*width] = blank;
-				}
-			}
+					meat_exist = false;
+					meat_count++;
 
-			// 4-3. 먹이가 존재하지 않으면 먹이를 생성하자.
-			if (!meat_exist)
-			{
-				// 만들고...
-				while (true)
-				{
-					if (board[meat_position[mp_index]] != blank)
-					{
-						mp_index++;
-						if (mp_index >= width*height)
-							mp_index=0;
-					}
-					else
-					{
-						myMeat.x = meat_position[mp_index]%width;
-						myMeat.y = meat_position[mp_index]/width;
-						board[meat_position[mp_index]] = meat;
-						break;
-					}
+					mover* pBody = new mover('*', Point(-1,-1));
+					body.push_back(pBody);
+
+					speed = speed + 0.1f;
 				}
 
-				meat_exist = true;
+				if (snake.direction == LEFT)
+				{
+					if (snake.pos.x == bordersize)
+						snake.direction = UP;
+					else
+					{
+						Point prev = snake.follow(Point(snake.pos.x-1, snake.pos.y));
+						std::list<mover*>::iterator it;
+						for (it = body.begin(); it != body.end(); it++)
+						{
+							prev = (*it)->follow(prev);
+						}
+					}
+				}
+				else if (snake.direction == UP)
+				{
+					if (snake.pos.y == bordersize)
+						snake.direction = RIGHT;
+					else
+					{
+						Point prev = snake.follow(Point(snake.pos.x, snake.pos.y-1));
+						std::list<mover*>::iterator it;
+						for (it = body.begin(); it != body.end(); it++)
+						{
+							prev = (*it)->follow(prev);
+						}
+					}
+				}
+				else if (snake.direction == RIGHT)
+				{
+					if (snake.pos.x + 1 == width - bordersize)
+						snake.direction = DOWN;
+					else
+					{
+						Point prev = snake.follow(Point(snake.pos.x+1, snake.pos.y));
+						std::list<mover*>::iterator it;
+						for (it = body.begin(); it != body.end(); it++)
+						{
+							prev = (*it)->follow(prev);
+						}
+					}
+				}
+				else if (snake.direction == DOWN)
+				{
+					if (snake.pos.y + 1 == height - bordersize)
+						snake.direction = LEFT;
+					else
+					{
+						Point prev = snake.follow(Point(snake.pos.x, snake.pos.y+1));
+						std::list<mover*>::iterator it;
+						for (it = body.begin(); it != body.end(); it++)
+						{
+							prev = (*it)->follow(prev);
+						}
+					}
+				}
+
+				// todo update.
+				for (int y = 0; y < height; y++)
+				{
+					for (int x = 0; x < width; x++)
+					{
+						if (x < bordersize || y < bordersize ||
+							x >= width-bordersize || y >= height-bordersize)
+							board[x + y*width] = border;
+						else if (snake.pos.x == x && snake.pos.y == y)
+							board[x + y*width] = snake.mark;
+						else if (myMeat.x == x && myMeat.y == y)
+							board[x + y*width] = meat;
+						else
+							board[x + y*width] = blank;
+
+						std::list<mover*>::iterator it;
+						for (it = body.begin(); it != body.end(); it++)
+						{
+							if ((*it)->pos.x == x && (*it)->pos.y == y)
+							{
+								board[x + y*width] = (*it)->mark;
+							}
+						}
+					}
+				}
+
+				// 4-3. 먹이가 존재하지 않으면 먹이를 생성하자.
+				if (!meat_exist)
+				{
+					// 만들고...
+					while (true)
+					{
+						if (board[meat_position[mp_index]] != blank)
+						{
+							mp_index++;
+							if (mp_index >= width*height)
+								mp_index=0;
+						}
+						else
+						{
+							myMeat.x = meat_position[mp_index]%width;
+							myMeat.y = meat_position[mp_index]/width;
+							board[meat_position[mp_index]] = meat;
+							break;
+						}
+					}
+
+					meat_exist = true;
+				}
 			}
 
 			need_to_draw = true;
@@ -246,16 +310,17 @@ private :
 	const int width;
 	const int height;
 	const char blank;
-	const char mark;
 	const char border;
 	const char meat;
 	bool need_to_update;
 	bool need_to_draw;
 	bool meat_exist;
-	Point myPoint;
 	Point myMeat;
 	int meat_count;
 	int bordersize;
+
+	mover snake;
+	std::list<mover*> body;
 
 	char *board;
 	int *meat_position;
