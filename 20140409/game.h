@@ -86,6 +86,13 @@ public :
 			delete board;
 		if (meat_position)
 			delete meat_position;
+
+		// 동적 생성된 mover 객체 메모리 해제.
+		std::list<mover*>::iterator it;
+		for (it = body.begin(); it != body.end(); it++)
+		{
+			delete (*it);
+		}
 	}
 
 	void Setup()
