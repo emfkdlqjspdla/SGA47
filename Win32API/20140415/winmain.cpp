@@ -30,14 +30,23 @@ INT WINAPI _tWinMain(HINSTANCE hInst,
 		return 1;
 	}
 
+	int width = 400;
+	int height = 300;
+
+	int cx = ::GetSystemMetrics(SM_CXSCREEN);
+	int cy = ::GetSystemMetrics(SM_CYSCREEN);
+
+	int x = (cx - width)/2;
+	int y = (cy - height)/2;
+
 	HWND hWnd = ::CreateWindowEx(0, 
 				szClassName, 
 				_T("Win32 Sample"),
-				WS_POPUP | WS_VISIBLE | WS_BORDER, 
-				100,
-				100,
-				400,
-				300,
+				WS_OVERLAPPEDWINDOW, 
+				x,
+				y,
+				width,
+				height,
 				NULL,
 				NULL,
 				hInst,
@@ -73,6 +82,31 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 	if (uMsg == WM_DESTROY)
 	{
 		::PostQuitMessage(0);
+		return 0;
+	}
+	else if (uMsg == WM_PAINT)
+	{
+		PAINTSTRUCT ps;
+		// Handle Device Context
+		HDC hdc = ::BeginPaint(hWnd, &ps);
+
+		// GDI object
+		// pen, brush, font, path, region, pallete
+		RECT rc;
+		::GetClientRect(hWnd, &rc);
+
+		HBRUSH hBrush = ::CreateSolidBrush(RGB(0x00,0xbf,0xff));
+
+		::FillRect(hdc, &rc, hBrush);
+
+		::SetBkMode(hdc, TRANSPARENT);
+
+		::DrawText(hdc, _T("Hello Win32 Programming"), -1, 
+			&rc, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+		::DeleteObject(hBrush);
+
+		::EndPaint(hWnd, &ps);
 		return 0;
 	}
 
