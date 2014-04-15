@@ -2,9 +2,9 @@
 
 LRESULT CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);
 
-INT WINAPI WinMain(HINSTANCE hInst,
+INT WINAPI wWinMain(HINSTANCE hInst,
 				   HINSTANCE hPrevInst,
-				   LPSTR lpCmdLine,
+				   LPWSTR lpCmdLine,
 				   INT nShowCmd)
 {
 	WNDCLASSEX wcex;
@@ -19,7 +19,7 @@ INT WINAPI WinMain(HINSTANCE hInst,
 	wcex.hCursor = ::LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground = (HBRUSH)::GetStockObject(WHITE_BRUSH);
     wcex.lpszMenuName = NULL;
-    wcex.lpszClassName = "MainWindowClass";
+    wcex.lpszClassName = L"MainWindowClass";
     wcex.hIconSm = ::LoadIcon(NULL, IDI_APPLICATION);
 
 	if (!::RegisterClassEx(&wcex))
@@ -29,8 +29,8 @@ INT WINAPI WinMain(HINSTANCE hInst,
 	}
 
 	HWND hWnd = ::CreateWindowEx(0, 
-				"MainWindowClass", 
-				"Win32 Sample",
+				L"MainWindowClass", 
+				L"Win32 Sample",
 				WS_OVERLAPPEDWINDOW, 
 				CW_USEDEFAULT,
 				CW_USEDEFAULT,
