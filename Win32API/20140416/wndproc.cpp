@@ -27,10 +27,6 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		BYTE b = rand()%256;
 		HBRUSH hRandBrush = ::CreateSolidBrush(RGB(r,g,b));
 
-		//::SetRect();
-		//::InflateRect();
-		//::OffsetRect();
-
 		RECT rc1 = rc;
 		rc1.right = rc1.right/2;
 		rc1.bottom = rc1.bottom/2;
