@@ -31,7 +31,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		RECT rc;
 		::GetClientRect(hWnd, &rc);
 
-		RECT box = {0,0,50,50};
+		RECT box = {(rc.right-rc.left)/2 - 25,0,(rc.right-rc.left)/2 + 25,50};
 		LONG width = box.right - box.left;
 		LONG height = box.bottom - box.top;
 
@@ -44,16 +44,22 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 			BYTE b = rand()%256;
 			for (int x = 0; x < rc.right - rc.left; x += width)
 			{
-				rcDraw = box;
-				::OffsetRect(&rcDraw, x, y);
-
-				r = max(r - 10, 0);
-				g = max(g - 10, 0);
-				b = max(b - 10, 0);
+				r = min(r + 10, 255);
+				g = min(g + 10, 255);
+				b = min(b + 10, 255);
 
 				HBRUSH hRandBrush = ::CreateSolidBrush(RGB(r,g,b));
 
+				rcDraw = box;
+				::OffsetRect(&rcDraw, x, y);
+
 				::FillRect(hdc, &rcDraw, hRandBrush);
+
+				rcDraw = box;
+				::OffsetRect(&rcDraw, -x, y);
+
+				::FillRect(hdc, &rcDraw, hRandBrush);
+
 				::DeleteObject(hRandBrush);
 
 			}
