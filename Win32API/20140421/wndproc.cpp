@@ -25,6 +25,23 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 		::DrawText(hdc, szBuffer, -1, &rc, DT_TOP | DT_LEFT);
 
+		const int r = 15;
+
+		HBRUSH hBrush = ::CreateSolidBrush(RGB(0,0,255));
+		HBRUSH hOldBrush = (HBRUSH)::SelectObject(hdc, hBrush);
+
+		HPEN hPen = ::CreatePen(PS_SOLID, 1, RGB(0,0,255));
+		HPEN hOldPen = (HPEN)::SelectObject(hdc, hPen);
+
+		::Ellipse(hdc, ptMouse.x-r,ptMouse.y-r,
+			ptMouse.x+r,ptMouse.y+r);
+
+		::SelectObject(hdc, hOldPen);
+		::DeleteObject(hPen);
+
+		::SelectObject(hdc, hOldBrush);
+		::DeleteObject(hBrush);
+
 		::EndPaint(hWnd, &ps);
 		return 0;
 	}
@@ -35,7 +52,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		::InvalidateRect(hWnd, &rc, TRUE);
 		return 0;
 	}
-	else if (uMsg == WM_LBUTTONDOWN)
+	else if (uMsg == WM_MOUSEMOVE)
 	{
 		ptMouse.x = GET_X_LPARAM(lParam);
 		ptMouse.y = GET_Y_LPARAM(lParam);
