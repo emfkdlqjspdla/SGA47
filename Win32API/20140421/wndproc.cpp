@@ -2,7 +2,6 @@
 
 LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
-	static BYTE vKey = 0x00;
 	static POINT ptMouse = {0,0};
 	static RECT rc = {0,0,0,0};
 	static int r = 15;
@@ -11,9 +10,14 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 	static bool bGPlus = true;
 	static bool bBPlus = true;
 
-
+	if (uMsg == WM_CREATE)
+	{
+		::SetTimer(hWnd, 0, 10, NULL);
+		return 0;
+	}
 	if (uMsg == WM_DESTROY)
 	{
+		::KillTimer(hWnd, 0);
 		::PostQuitMessage(0);
 		return 0;
 	}
@@ -27,7 +31,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 		TCHAR szBuffer[100];
 
-		_stprintf_s(szBuffer, _T("%x\r\nx = %d\r\ny = %d"), vKey, ptMouse.x, ptMouse.y);
+		_stprintf_s(szBuffer, _T("x = %d\r\ny = %d"), ptMouse.x, ptMouse.y);
 
 		::DrawText(hdc, szBuffer, -1, &rc, DT_TOP | DT_LEFT);
 
@@ -49,21 +53,21 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		::EndPaint(hWnd, &ps);
 		return 0;
 	}
-	else if (uMsg == WM_KEYDOWN)
+	else if (uMsg == WM_TIMER)
 	{
-		vKey = wParam;
+		InputDevice.Update(0);
 
-		if (vKey == VK_ADD)
+		if (InputDevice.IsPressed(VK_ADD))
 		{
 			r++;
 			::InvalidateRect(hWnd, &rc, TRUE);
 		}
-		else if (vKey == VK_SUBTRACT)
+		if (InputDevice.IsPressed(VK_SUBTRACT))
 		{
 			r--;
 			::InvalidateRect(hWnd, &rc, TRUE);
 		}
-		else if (vKey == 'R')
+		if (InputDevice.IsPressed('R'))
 		{
 			if (GetRValue(color) == 255)
 			{
@@ -88,7 +92,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 			}
 			::InvalidateRect(hWnd, &rc, TRUE);
 		}
-		else if (vKey == 'G')
+		if (InputDevice.IsPressed('G'))
 		{
 			if (GetGValue(color) == 255)
 			{
@@ -113,7 +117,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 			}
 			::InvalidateRect(hWnd, &rc, TRUE);
 		}
-		else if (vKey == 'B')
+		if (InputDevice.IsPressed('B'))
 		{
 			if (GetBValue(color) == 255)
 			{
