@@ -15,7 +15,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 	if (uMsg == WM_CREATE)
 	{
-		::SetTimer(hWnd, 0, 1000, NULL);
+		::SetTimer(hWnd, 0, 100, NULL);
 	}
 	else if (uMsg == WM_DESTROY)
 	{
@@ -30,21 +30,39 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 		// 12 h : 360 = 1 h : x
 		// x = 360/12 = 30
+		// 60 m : 30 deg = 1m : x deg
+		// x = 30/60 = 1/2 deg
+		// 60 s : 1/2 deg = 1 s : x deg
+		// x = 1/120 deg
+		// 1000 ms : 1/120 deg = 1ms : x deg
+		// x = 1/120000 deg
 
-		theta_hour = (st.wHour%12)*30.f;
+		theta_hour = (st.wHour%12)*30.f 
+			+ (st.wMinute)/2.f 
+			+ (st.wSecond)/120.f
+			+ (st.wMilliseconds)/120000.f;
 
 		ptHour.x = LONG(hour_needle*sin(theta_hour*D2R));
 		ptHour.y = LONG(-hour_needle*cos(theta_hour*D2R));
 
 		// 60 m : 360 = 1 m : x
 		// x = 360/60 = 6
+		// 60s : 6 deg = 1s : x deg
+		// x = 1/10 deg
+		// 1000ms : 1/10 deg = 1ms : x deg
+		// x = 1/10000 deg
 
-		theta_minute = (st.wMinute)*6.f;
+		theta_minute = (st.wMinute)*6.f 
+			+ (st.wSecond)/10.f
+			+ (st.wMilliseconds)/10000.f;
 
 		ptMinute.x = LONG(minute_needle*sin(theta_minute*D2R));
 		ptMinute.y = LONG(-minute_needle*cos(theta_minute*D2R));
 		
-		theta_second = (st.wSecond)*6.f;
+		// 1000ms : 6 deg = 1ms : x deg
+		// x = 6/1000 deg
+
+		theta_second = (st.wSecond)*6.f + (st.wMilliseconds)*6.f/1000.f;
 
 		ptSecond.x = LONG(second_needle*sin(theta_second*D2R));
 		ptSecond.y = LONG(-second_needle*cos(theta_second*D2R));
