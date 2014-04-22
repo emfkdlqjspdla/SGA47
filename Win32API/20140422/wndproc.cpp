@@ -52,12 +52,21 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		HBITMAP hOldImage = (HBITMAP)::SelectObject(hBitmapDC, hImage);
 
 		// 이미지 DC의 내용(이미지)을 화면에 뿌린다.
-		::BitBlt(hdc, 
-			ptMouse.x - cBitmap.cx/2, 
-			ptMouse.y - cBitmap.cy/2, 
-			cBitmap.cx, cBitmap.cy, 
+		//::BitBlt(hdc, 
+		//	ptMouse.x - cBitmap.cx/2, 
+		//	ptMouse.y - cBitmap.cy/2, 
+		//	cBitmap.cx, cBitmap.cy, 
+		//	hBitmapDC, 
+		//	0, 0, 
+		//	SRCCOPY);
+
+		::StretchBlt(hdc, 
+			ptMouse.x - 50, 
+			ptMouse.y - 50, 
+			100, 100, 
 			hBitmapDC, 
-			0, 0, 
+			0, 0,
+			cBitmap.cx, cBitmap.cy,
 			SRCCOPY);
 
 		// 이미지 DC 제거.
