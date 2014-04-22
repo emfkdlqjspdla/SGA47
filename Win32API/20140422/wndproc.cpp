@@ -3,14 +3,22 @@
 LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
 	static HBITMAP hImage = NULL;
+	static POINT ptMouse = {0,0};
+	static SIZE cBitmap = {0,0};
+
 	if (uMsg == WM_CREATE)
 	{
 		// 비트맵 이미지 로드.
 		hImage = (HBITMAP)::LoadImage(NULL, 
-					_T("circle.bmp"), 
+					_T("1364722-starcraft2_marine.bmp"), 
 					IMAGE_BITMAP,
 					0,0,
 					LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_SHARED);
+
+		BITMAP bm;
+		::GetObject(hImage, sizeof(BITMAP), &bm);
+		cBitmap.cx = bm.bmWidth;
+		cBitmap.cy = bm.bmHeight;
 
 		return 0;
 	}
@@ -44,13 +52,30 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		HBITMAP hOldImage = (HBITMAP)::SelectObject(hBitmapDC, hImage);
 
 		// 이미지 DC의 내용(이미지)을 화면에 뿌린다.
-		::BitBlt(hdc, 0, 0, 100, 100, hBitmapDC, 0, 0, SRCCOPY);
+		::BitBlt(hdc, 
+			ptMouse.x - cBitmap.cx/2, 
+			ptMouse.y - cBitmap.cy/2, 
+			cBitmap.cx, cBitmap.cy, 
+			hBitmapDC, 
+			0, 0, 
+			SRCCOPY);
 
 		// 이미지 DC 제거.
 		::SelectObject(hBitmapDC, hOldImage);
 		::DeleteDC(hdc);
 
 		::EndPaint(hWnd, &ps);
+		return 0;
+	}
+	else if (uMsg == WM_MOUSEMOVE)
+	{
+		ptMouse.x = GET_X_LPARAM(lParam);
+		ptMouse.y = GET_Y_LPARAM(lParam);
+
+		RECT rc;
+		::GetClientRect(hWnd, &rc);
+		::InvalidateRect(hWnd, &rc, TRUE);
+
 		return 0;
 	}
 
