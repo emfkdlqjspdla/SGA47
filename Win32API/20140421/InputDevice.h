@@ -1,25 +1,19 @@
 ﻿#pragma once
 
-class InputProcessor
+#include "utility.hpp"
+#include <windows.h>
+
+class InputProcessor : public singleton<InputProcessor>
 {
+	friend class singleton<InputProcessor>;
 private :
 	InputProcessor();
 	~InputProcessor();
 
 public :
-	static InputProcessor& getReference()
-	{
-		static InputProcessor inst;
-
-		return inst;
-	}
-	void Update(DWORD tick)
-	{
-		::GetKeyboardState(cKey);
-	}
-	bool IsPressed(const short& vkey)
-	{
-	}
+	void Update(DWORD tick);
+	bool IsPressed(const short& vkey);
+	bool operator [] (const short& vkey);
 
 private :
 	enum {count=256};

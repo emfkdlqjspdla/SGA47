@@ -9,6 +9,6 @@
 
 #define D2R 0.0174532f
 
-#include "InputProcessor.h"
+#include "InputDevice.h"
 
 LRESULT CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);

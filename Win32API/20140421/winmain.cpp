@@ -77,6 +77,8 @@ INT WINAPI _tWinMain(HINSTANCE hInst,
 		}
 		if (msg.message == WM_QUIT)
 			break;
+
+
 	}
 
 	return msg.wParam;

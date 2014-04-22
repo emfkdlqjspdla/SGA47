@@ -57,7 +57,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 	{
 		InputDevice.Update(0);
 
-		if (InputDevice.IsPressed(VK_ADD))
+		if (InputDevice[VK_ADD])
 		{
 			r++;
 			::InvalidateRect(hWnd, &rc, TRUE);
