@@ -2,17 +2,27 @@
 
 LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
-	static POINT ptCircle = {200,100};
-	static const LONG radius = 20;
-	static LONG velocity = 0;
+	static Object* marble[10];
 
 	if (uMsg == WM_CREATE)
 	{
-		::SetTimer(hWnd, 0, 10, NULL);
+		// 원을 만들기
+		for (int i = 0; i < 10; i++)
+		{
+			marble[i] = new Circle;
+		}
+
+		::SetTimer(hWnd, 0, 30, NULL);
 		return 0;
 	}
 	else if (uMsg == WM_DESTROY)
 	{
+		// 만든 원을 삭제..
+		for (int i = 0; i < 10; i++)
+		{
+			delete marble[i];
+		}
+
 		::KillTimer(hWnd, 0);
 		::PostQuitMessage(0);
 		return 0;
@@ -26,23 +36,21 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		// Handle Device Context
 		HDC hdc = ::BeginPaint(hWnd, &ps);
 
-		::Ellipse(hdc, 
-			ptCircle.x - radius,
-			ptCircle.y - radius,
-			ptCircle.x + radius,
-			ptCircle.y + radius);
+		// 만든 원 그리기..
+		for (int i = 0; i < 10; i++)
+		{
+			marble[i]->Draw(hdc);
+		}
 
 		::EndPaint(hWnd, &ps);
 		return 0;
 	}
 	else if (uMsg == WM_TIMER)
 	{
-		velocity += 1;
-		ptCircle.y += velocity;
-
-		if (ptCircle.y + radius >= 400)
+		// 만든 원 업데이트.
+		for (int i = 0; i < 10; i++)
 		{
-			velocity = -velocity - 1;
+			marble[i]->Update(0);
 		}
 
 		RECT rc;
