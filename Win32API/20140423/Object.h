@@ -11,8 +11,9 @@ public :
 class Circle : public Object
 {
 public :
-	Circle()
+	Circle(HWND hWnd = NULL)
 	{
+		hOwner = hWnd;
 		velocity = 0;
 
 		ptCenter.x = rand()%300 + 50;
@@ -26,15 +27,26 @@ public :
 
 		color = RGB(r,g,b);
 	}
+	void SetCenter()
+	{
+	}
+	void Attach(HWND hWnd)
+	{
+		hOwner = hWnd;
+	}
 	void Update(DWORD tick)
 	{
-		velocity += 1;
-		ptCenter.y += velocity;
+		::GetCursorPos(&ptCenter);
+		::ScreenToClient(hOwner, &ptCenter);
 
-		if (ptCenter.y + radius >= 400)
-		{
-			velocity = -velocity - 1;
-		}
+
+		//velocity += 1;
+		//ptCenter.y += velocity;
+
+		//if (ptCenter.y + radius >= 400)
+		//{
+		//	velocity = -velocity - 1;
+		//}
 	}
 	void Draw(HDC hdc)
 	{
@@ -56,4 +68,5 @@ private :
 	LONG radius;
 	LONG velocity;
 	COLORREF color;
+	HWND hOwner;
 };

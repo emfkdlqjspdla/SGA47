@@ -9,7 +9,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		// 원을 만들기
 		for (int i = 0; i < 10; i++)
 		{
-			marble[i] = new Circle;
+			marble[i] = new Circle(hWnd);
 		}
 
 		::SetTimer(hWnd, 0, 30, NULL);
