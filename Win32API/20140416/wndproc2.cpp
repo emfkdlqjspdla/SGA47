@@ -17,7 +17,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 	{
 		RECT rc;
 		::GetClientRect(hWnd, &rc);
-		::InvalidateRect(hWnd, &rc, TRUE);
+		//::InvalidateRect(hWnd, &rc, TRUE);
 		return 0;
 	}
 	else if (uMsg == WM_PAINT)
@@ -31,7 +31,11 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		RECT rc;
 		::GetClientRect(hWnd, &rc);
 
-		RECT box = {(rc.right-rc.left)/2 - 25,(rc.bottom-rc.top)/2 - 25,(rc.right-rc.left)/2 + 25,(rc.bottom-rc.top)/2 + 25};
+		LONG size = 10;
+		RECT box = {(rc.right-rc.left)/2 - size,
+			(rc.bottom-rc.top)/2 - size,
+			(rc.right-rc.left)/2 + size,
+			(rc.bottom-rc.top)/2 + size};
 		LONG width = box.right - box.left;
 		LONG height = box.bottom - box.top;
 
@@ -40,14 +44,15 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		BYTE r = rand()%256;
 		BYTE g = rand()%256;
 		BYTE b = rand()%256;
-		COLORREF color, prev;
-		color = RGB(r,g,b);
 
-		for (int y = 0; y < rc.bottom - rc.top; y += height)
+		COLORREF color = RGB(r,g,b);
+
+		for (int y = 0, i = 0; y < rc.bottom - rc.top; y += height, i++)
 		{
-			r = min(GetRValue(color) + 10, 255);
-			g = min(GetGValue(color) + 10, 255);
-			b = min(GetBValue(color) + 10, 255);
+			r = min(GetRValue(color) + 10*i, 255);
+			g = min(GetGValue(color) + 10*i, 255);
+			b = min(GetBValue(color) + 10*i, 255);
+
 			for (int x = 0; x < rc.right - rc.left; x += width)
 			{
 				prev = color;
@@ -67,6 +72,14 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 				rcDraw = box;
 				::OffsetRect(&rcDraw, -x, y);
+				::FillRect(hdc, &rcDraw, hRandBrush);
+
+				rcDraw = box;
+				::OffsetRect(&rcDraw, x, -y);
+				::FillRect(hdc, &rcDraw, hRandBrush);
+
+				rcDraw = box;
+				::OffsetRect(&rcDraw, -x, -y);
 				::FillRect(hdc, &rcDraw, hRandBrush);
 
 				::DeleteObject(hRandBrush);
