@@ -31,36 +31,57 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		RECT rc;
 		::GetClientRect(hWnd, &rc);
 
-		RECT box = {(rc.right-rc.left)/2 - 25,0,(rc.right-rc.left)/2 + 25,50};
+		RECT box = {(rc.right-rc.left)/2 - 25,(rc.bottom-rc.top)/2 - 25,(rc.right-rc.left)/2 + 25,(rc.bottom-rc.top)/2 + 25};
 		LONG width = box.right - box.left;
 		LONG height = box.bottom - box.top;
 
 		RECT rcDraw;
 
+		BYTE r = rand()%256;
+		BYTE g = rand()%256;
+		BYTE b = rand()%256;
+		COLORREF color, prev;
+		color = RGB(r,g,b);
+
 		for (int y = 0; y < rc.bottom - rc.top; y += height)
 		{
-			BYTE r = rand()%256;
-			BYTE g = rand()%256;
-			BYTE b = rand()%256;
+			r = min(GetRValue(color) + 10, 255);
+			g = min(GetGValue(color) + 10, 255);
+			b = min(GetBValue(color) + 10, 255);
 			for (int x = 0; x < rc.right - rc.left; x += width)
 			{
-				r = min(r + 10, 255);
-				g = min(g + 10, 255);
-				b = min(b + 10, 255);
+				prev = color;
+				if (x != 0)
+				{
+					r = min(GetRValue(color) + 10, 255);
+					g = min(GetGValue(color) + 10, 255);
+					b = min(GetBValue(color) + 10, 255);
+				}
+				color = RGB(r,g,b);
 
-				HBRUSH hRandBrush = ::CreateSolidBrush(RGB(r,g,b));
+				HBRUSH hRandBrush = ::CreateSolidBrush(color);
 
 				rcDraw = box;
 				::OffsetRect(&rcDraw, x, y);
-
 				::FillRect(hdc, &rcDraw, hRandBrush);
 
 				rcDraw = box;
 				::OffsetRect(&rcDraw, -x, y);
-
 				::FillRect(hdc, &rcDraw, hRandBrush);
 
 				::DeleteObject(hRandBrush);
+
+				//hRandBrush = ::CreateSolidBrush(prev);
+
+				//rcDraw = box;
+				//::OffsetRect(&rcDraw, -x, y);
+				//::FillRect(hdc, &rcDraw, hRandBrush);
+
+				//rcDraw = box;
+				//::OffsetRect(&rcDraw, -x, -y);
+				//::FillRect(hdc, &rcDraw, hRandBrush);
+
+				//::DeleteObject(hRandBrush);
 
 			}
 		}
