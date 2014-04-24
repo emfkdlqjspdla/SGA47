@@ -207,6 +207,10 @@
 			Name="Base"
 			>
 			<File
+				RelativePath=".\BaseType.h"
+				>
+			</File>
+			<File
 				RelativePath=".\InputDevice.cpp"
 				>
 			</File>

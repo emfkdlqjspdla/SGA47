@@ -30,7 +30,8 @@ protected :
 class Circle : public Object
 {
 public :
-	Circle()
+	Circle(const SIZE& _area)
+		: area(_area)
 	{
 		velocity = 0;
 
@@ -50,9 +51,18 @@ public :
 		velocity += 1;
 		ptCenter.y += velocity;
 
-		if (ptCenter.y + radius >= 400)
+		if (ptCenter.y + radius >= area.cy)
 		{
 			velocity = -velocity - 1;
+		}
+
+		if (ptCenter.x + radius >= area.cx)
+		{
+			ptCenter.x -= radius;
+		}
+		else if (ptCenter.x - radius <= 0)
+		{
+			ptCenter.x += radius;
 		}
 	}
 	virtual void Draw(HDC hdc)
@@ -79,6 +89,7 @@ public :
 private :
 	LONG velocity;
 	COLORREF color;
+	SIZE area;
 };
 
 class MouseCircle : public Object
@@ -90,7 +101,7 @@ public :
 		ptCenter.x = 0;
 		ptCenter.y = 0;
 
-		radius = 20;
+		radius = 50;
 
 		color = RGB(255,0,0);
 	}
