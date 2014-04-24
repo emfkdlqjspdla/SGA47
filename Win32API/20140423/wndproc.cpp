@@ -2,15 +2,18 @@
 
 LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
-	static Object* marble[10];
+	static Object* marble[10] = {0};
+	static Object* objMouse = NULL;
 
 	if (uMsg == WM_CREATE)
 	{
 		// 원을 만들기
 		for (int i = 0; i < 10; i++)
 		{
-			marble[i] = new Circle(hWnd);
+			marble[i] = new Circle();
 		}
+
+		objMouse = new MouseCircle(hWnd);
 
 		::SetTimer(hWnd, 0, 30, NULL);
 		return 0;
@@ -22,6 +25,8 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		{
 			delete marble[i];
 		}
+
+		delete objMouse;
 
 		::KillTimer(hWnd, 0);
 		::PostQuitMessage(0);
@@ -42,6 +47,8 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 			marble[i]->Draw(hdc);
 		}
 
+		objMouse->Draw(hdc);
+
 		::EndPaint(hWnd, &ps);
 		return 0;
 	}
@@ -50,8 +57,18 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		// 만든 원 업데이트.
 		for (int i = 0; i < 10; i++)
 		{
+			// 충돌을 했다면...
+			if (IsCollide(marble[i], objMouse))
+			{
+				POINT pt = marble[i]->getCenter();
+				pt.x += 100;
+				marble[i]->SetCenter(pt);
+			}
+
 			marble[i]->Update(0);
 		}
+
+		objMouse->Update(0);
 
 		RECT rc;
 		::GetClientRect(hWnd, &rc);

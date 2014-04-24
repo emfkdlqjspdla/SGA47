@@ -55,7 +55,6 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 			for (int x = 0; x < rc.right - rc.left; x += width)
 			{
-				prev = color;
 				if (x != 0)
 				{
 					r = min(GetRValue(color) + 10, 255);

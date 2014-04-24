@@ -1,19 +1,37 @@
 ﻿#pragma once
 
+#include <math.h>
+#include <windows.h>
+
 class Object
 {
 public :
 	virtual void Update(DWORD tick) = 0;
 	virtual void Draw(HDC hdc) = 0;
-};
+	POINT getCenter() const
+	{
+		return ptCenter;
+	}
+	LONG getRadius() const
+	{
+		return radius;
+	}
+	void SetCenter(const POINT& pt)
+	{
+		ptCenter.x = pt.x;
+		ptCenter.y = pt.y;
+	}
 
+protected :
+	POINT ptCenter;
+	LONG radius;
+};
 
 class Circle : public Object
 {
 public :
-	Circle(HWND hWnd = NULL)
+	Circle()
 	{
-		hOwner = hWnd;
 		velocity = 0;
 
 		ptCenter.x = rand()%300 + 50;
@@ -27,29 +45,21 @@ public :
 
 		color = RGB(r,g,b);
 	}
-	void SetCenter()
+	virtual void Update(DWORD tick)
 	{
-	}
-	void Attach(HWND hWnd)
-	{
-		hOwner = hWnd;
-	}
-	void Update(DWORD tick)
-	{
-		::GetCursorPos(&ptCenter);
-		::ScreenToClient(hOwner, &ptCenter);
+		velocity += 1;
+		ptCenter.y += velocity;
 
-
-		//velocity += 1;
-		//ptCenter.y += velocity;
-
-		//if (ptCenter.y + radius >= 400)
-		//{
-		//	velocity = -velocity - 1;
-		//}
+		if (ptCenter.y + radius >= 400)
+		{
+			velocity = -velocity - 1;
+		}
 	}
-	void Draw(HDC hdc)
+	virtual void Draw(HDC hdc)
 	{
+		HPEN hPen = ::CreatePen(PS_SOLID, 1, color);
+		HPEN hOldPen = (HPEN)::SelectObject(hdc, hPen);
+
 		HBRUSH hBrush = ::CreateSolidBrush(color);
 		HBRUSH hOldBrush = (HBRUSH)::SelectObject(hdc, hBrush);
 
@@ -61,12 +71,63 @@ public :
 
 		::SelectObject(hdc, hOldBrush);
 		::DeleteObject(hBrush);
+
+		::SelectObject(hdc, hOldPen);
+		::DeleteObject(hPen);
 	}
 
 private :
-	POINT ptCenter;
-	LONG radius;
 	LONG velocity;
+	COLORREF color;
+};
+
+class MouseCircle : public Object
+{
+public :
+	MouseCircle(HWND hWnd = NULL)
+		: hOwner(hWnd)
+	{
+		ptCenter.x = 0;
+		ptCenter.y = 0;
+
+		radius = 20;
+
+		color = RGB(255,0,0);
+	}
+	void Attach(HWND hWnd)
+	{
+		hOwner = hWnd;
+	}
+	void Update(DWORD tick)
+	{
+		// GetCursorPos 는 screen coord 값을 가져옴.
+		::GetCursorPos(&ptCenter);
+		// screen coord => client coord
+		::ScreenToClient(hOwner, &ptCenter);
+	}
+	void Draw(HDC hdc)
+	{
+		HPEN hPen = ::CreatePen(PS_SOLID, 1, color);
+		HPEN hOldPen = (HPEN)::SelectObject(hdc, hPen);
+
+		HBRUSH hBrush = ::CreateSolidBrush(color);
+		HBRUSH hOldBrush = (HBRUSH)::SelectObject(hdc, hBrush);
+
+		::Ellipse(hdc, 
+			ptCenter.x - radius,
+			ptCenter.y - radius,
+			ptCenter.x + radius,
+			ptCenter.y + radius);
+
+		::SelectObject(hdc, hOldBrush);
+		::DeleteObject(hBrush);
+
+		::SelectObject(hdc, hOldPen);
+		::DeleteObject(hPen);
+	}
+private :
 	COLORREF color;
 	HWND hOwner;
 };
+
+bool IsCollide(Object* lhs, Object* rhs);
