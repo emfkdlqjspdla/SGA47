@@ -67,19 +67,21 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		for (int i = 0; i < count; i++)
 		{
 			// 충돌을 했다면...
-			//if (IsCollide(marble[i], objMouse))
-			//{
-			//	POINT pt = marble[i]->getCenter();
-			//	if (marble[i]->getCenter().x > objMouse->getCenter().x)
-			//	{
-			//		pt.x += objMouse->getRadius();
-			//	}
-			//	else
-			//	{
-			//		pt.x -= objMouse->getRadius();
-			//	}
-			//	marble[i]->SetCenter(pt);
-			//}
+			if (IsCollide(marble[i], objMouse))
+			{
+				POINT pt = marble[i]->getCenter();
+				if (marble[i]->getCenter().x > objMouse->getCenter().x)
+				{
+					pt.x += objMouse->getRadius();
+				}
+				else
+				{
+					pt.x -= objMouse->getRadius();
+				}
+				Circle* pCircle = dynamic_cast<Circle*>(marble[i]);
+				pCircle->SetDirection(!pCircle->GetDirection());
+				marble[i]->SetCenter(pt);
+			}
 
 			//for (int j = i+1; j < count; j++)
 			//{

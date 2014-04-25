@@ -2,6 +2,7 @@
 
 #include <math.h>
 #include <windows.h>
+#include <tchar.h>
 
 class Object
 {
@@ -83,23 +84,56 @@ public :
 	}
 	virtual void Draw(HDC hdc)
 	{
-		HPEN hPen = ::CreatePen(PS_SOLID, 1, color);
-		HPEN hOldPen = (HPEN)::SelectObject(hdc, hPen);
+		HBITMAP hBitmap = (HBITMAP)::LoadImage(NULL, _T("circle.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_SHARED);
+		HDC hBitmapDC = ::CreateCompatibleDC(hdc);
+		HBITMAP hOldBitmap = (HBITMAP)::SelectObject(hBitmapDC, hBitmap);
 
-		HBRUSH hBrush = ::CreateSolidBrush(color);
-		HBRUSH hOldBrush = (HBRUSH)::SelectObject(hdc, hBrush);
+		BITMAP bm;
+		::GetObject(hBitmap, sizeof(BITMAP), &bm);
+		int cx = bm.bmWidth;
+		int cy = bm.bmHeight;
 
-		::Ellipse(hdc, 
-			ptCenter.x - radius,
-			ptCenter.y - radius,
-			ptCenter.x + radius,
-			ptCenter.y + radius);
+		//::BitBlt(hdc, ptCenter.x - radius, ptCenter.y - radius,
+		//	radius*2, radius*2, hBitmapDC, 0, 0, SRCCOPY);
 
-		::SelectObject(hdc, hOldBrush);
-		::DeleteObject(hBrush);
+		::GdiTransparentBlt(hdc, ptCenter.x - radius, ptCenter.y - radius,
+			radius*2, radius*2, hBitmapDC, 0, 0, cx, cy, RGB(255,255,255));
 
-		::SelectObject(hdc, hOldPen);
-		::DeleteObject(hPen);
+		::SelectObject(hBitmapDC, hOldBitmap);
+		::DeleteDC(hBitmapDC);
+		::DeleteObject(hBitmap);
+
+		//HPEN hPen = ::CreatePen(PS_SOLID, 1, color);
+		//HPEN hOldPen = (HPEN)::SelectObject(hdc, hPen);
+
+		//HBRUSH hBrush = ::CreateSolidBrush(color);
+		//HBRUSH hOldBrush = (HBRUSH)::SelectObject(hdc, hBrush);
+
+		//::Ellipse(hdc, 
+		//	ptCenter.x - radius,
+		//	ptCenter.y - radius,
+		//	ptCenter.x + radius,
+		//	ptCenter.y + radius);
+
+		//::SelectObject(hdc, hOldBrush);
+		//::DeleteObject(hBrush);
+
+		//::SelectObject(hdc, hOldPen);
+		//::DeleteObject(hPen);
+	}
+	void SetDirection(bool bRight = true)
+	{
+		if (bRight)
+			dx = xVel;
+		else
+			dx = -xVel;
+	}
+	bool GetDirection() const
+	{
+		if (dx > 0)
+			return true;
+		
+		return false;
 	}
 
 private :
