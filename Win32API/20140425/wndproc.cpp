@@ -7,17 +7,17 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 	static Object* objMouse = NULL;
 	static DWORD dt = 1;
 	static DWORD st = ::GetTickCount();
+	static RECT rc;
 
 	if (uMsg == WM_CREATE)
 	{
-		RECT rc;
 		::GetClientRect(hWnd, &rc);
 		SIZE area = {rc.right-rc.left, rc.bottom-rc.top};
 
 		// 원을 만들기
 		for (int i = 0; i < count; i++)
 		{
-			marble[i] = new Circle(area);
+			marble[i] = new Circle(area, rand()%7);
 		}
 
 		objMouse = new MouseCircle(hWnd);
@@ -41,23 +41,44 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 	}
 	else if (uMsg == WM_PAINT)
 	{
-		RECT rc;
-		::GetClientRect(hWnd, &rc);
+		int cx = rc.right - rc.left;
+		int cy = rc.bottom - rc.top;
 
 		PAINTSTRUCT ps;
 		// Handle Device Context
 		HDC hdc = ::BeginPaint(hWnd, &ps);
 
+		// DoubleBuffer 를 위한 DC 생성/Bitmap 생성
+		HDC hMemDC = ::CreateCompatibleDC(hdc);
+		HBITMAP hMemBitmap = ::CreateCompatibleBitmap(hdc, cx, cy);
+		HBITMAP hOldMemBitmap = (HBITMAP)::SelectObject(hMemDC, hMemBitmap);
+
+		// 생성된 Bitmap은 검정색이라서 다른색으로 채워준다.
+		::SetDCBrushColor(hMemDC, RGB(0,255,255));
+		::FillRect(hMemDC, &rc, (HBRUSH)::GetStockObject(DC_BRUSH));
+
 		// 만든 원 그리기..
 		for (int i = 0; i < count; i++)
 		{
-			marble[i]->Draw(hdc);
+			marble[i]->Draw(hMemDC);
 		}
 
-		objMouse->Draw(hdc);
+		objMouse->Draw(hMemDC);
+
+		// 메모리DC의 내용을 실제 화면에 뿌려준다.
+		::BitBlt(hdc, 0, 0, cx, cy, hMemDC, 0, 0, SRCCOPY);
+
+		// 메모리DC/메모리Bitmap을 삭제.
+		::SelectObject(hMemDC, hOldMemBitmap);
+		::DeleteObject(hMemBitmap);
+		::DeleteDC(hMemDC);
 
 		::EndPaint(hWnd, &ps);
 		return 0;
+	}
+	else if (uMsg == WM_ERASEBKGND)
+	{
+		return 1;
 	}
 	else if (uMsg == WM_TIMER)
 	{

@@ -43,7 +43,7 @@ INT WINAPI _tWinMain(HINSTANCE hInst,
 	DWORD dwStyle = WS_OVERLAPPEDWINDOW;
 	dwStyle = dwStyle & ~WS_MAXIMIZEBOX;
 	dwStyle = dwStyle & ~WS_MINIMIZEBOX;
-	dwStyle = dwStyle & ~WS_THICKFRAME;
+	///dwStyle = dwStyle & ~WS_THICKFRAME;
 
 	HWND hWnd = ::CreateWindowEx(0, 
 				szClassName, 

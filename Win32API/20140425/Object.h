@@ -31,11 +31,12 @@ protected :
 class Circle : public Object
 {
 public :
-	Circle(const SIZE& _area)
+	Circle(const SIZE& _area, const int& i)
 		: area(_area)
 		, update_dt(0), delay(50)
 		, dx(5), xVel(5)
-		, accel(1.f), velocity(0.f)
+		, velocity(0)
+		, index(i)
 	{
 
 		ptCenter.x = rand()%300 + 50;
@@ -57,17 +58,14 @@ public :
 
 			for (int i = 0; i < count; i++)
 			{
-				accel -= 0.1f;
-				if (accel <= 0.f)
-					accel = 0.f;
-				velocity += accel;
+				velocity += 1;
 				ptCenter.y += velocity;
 
 				ptCenter.x += dx;
 
 				if (ptCenter.y + radius >= area.cy)
 				{
-					velocity = -velocity;
+					velocity = -velocity - 1;
 				}
 
 				if (ptCenter.x + radius >= area.cx)
@@ -87,20 +85,20 @@ public :
 	}
 	virtual void Draw(HDC hdc)
 	{
-		HBITMAP hBitmap = (HBITMAP)::LoadImage(NULL, _T("circle.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_SHARED);
+		HBITMAP hBitmap = (HBITMAP)::LoadImage(NULL, _T("circle_group.bmp"), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_SHARED);
 		HDC hBitmapDC = ::CreateCompatibleDC(hdc);
 		HBITMAP hOldBitmap = (HBITMAP)::SelectObject(hBitmapDC, hBitmap);
 
 		BITMAP bm;
 		::GetObject(hBitmap, sizeof(BITMAP), &bm);
-		int cx = bm.bmWidth;
+		int cx = bm.bmWidth/7;
 		int cy = bm.bmHeight;
 
 		//::BitBlt(hdc, ptCenter.x - radius, ptCenter.y - radius,
 		//	radius*2, radius*2, hBitmapDC, 0, 0, SRCCOPY);
 
 		::GdiTransparentBlt(hdc, ptCenter.x - radius, ptCenter.y - radius,
-			radius*2, radius*2, hBitmapDC, 0, 0, cx, cy, RGB(255,255,255));
+			radius*2, radius*2, hBitmapDC, index*cx, 0, cx, cy, RGB(255,255,255));
 
 		::SelectObject(hBitmapDC, hOldBitmap);
 		::DeleteDC(hBitmapDC);
@@ -140,14 +138,14 @@ public :
 	}
 
 private :
-	float accel;
-	float velocity;
+	LONG velocity;
 	COLORREF color;
 	SIZE area;
 	DWORD update_dt;
 	DWORD delay;
 	LONG dx;
 	LONG xVel;
+	int index;
 };
 
 class MouseCircle : public Object
