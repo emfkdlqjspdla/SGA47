@@ -42,11 +42,6 @@ INT WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, INT)
 		x, y, width, height,
 		NULL, NULL, hInst, NULL);
 
-	if (hWnd == NULL)
-	{
-		return 2;
-	}
-
 	::ShowWindow(hWnd, SW_NORMAL);
 	::UpdateWindow(hWnd);
 

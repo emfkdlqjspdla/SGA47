@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="TimeAttack"
-	ProjectGUID="{3DA3D71C-72EA-4664-B8CD-56CA6C63F627}"
-	RootNamespace="TimeAttack"
+	Name="20140425"
+	ProjectGUID="{75A7658D-9FE8-4330-96F5-3293640E2301}"
+	RootNamespace="20140425"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>

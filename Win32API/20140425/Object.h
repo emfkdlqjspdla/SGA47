@@ -35,8 +35,8 @@ public :
 		: area(_area)
 		, update_dt(0), delay(50)
 		, dx(5), xVel(5)
+		, accel(1.f), velocity(0.f)
 	{
-		velocity = 0;
 
 		ptCenter.x = rand()%300 + 50;
 		ptCenter.y = rand()%100 + 50;
@@ -57,14 +57,17 @@ public :
 
 			for (int i = 0; i < count; i++)
 			{
-				velocity += 1;
+				accel -= 0.1f;
+				if (accel <= 0.f)
+					accel = 0.f;
+				velocity += accel;
 				ptCenter.y += velocity;
 
 				ptCenter.x += dx;
 
 				if (ptCenter.y + radius >= area.cy)
 				{
-					velocity = -velocity - 1;
+					velocity = -velocity;
 				}
 
 				if (ptCenter.x + radius >= area.cx)
@@ -137,7 +140,8 @@ public :
 	}
 
 private :
-	LONG velocity;
+	float accel;
+	float velocity;
 	COLORREF color;
 	SIZE area;
 	DWORD update_dt;

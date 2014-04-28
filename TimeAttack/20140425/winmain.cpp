@@ -27,25 +27,16 @@ INT WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, INT)
 	int cx = ::GetSystemMetrics(SM_CXSCREEN);
 	int cy = ::GetSystemMetrics(SM_CYSCREEN);
 
-	int width = 500;
-	int height = 500;
-
-	int x = (cx - width)/2;
-	int y = (cy - height)/2;
+	int x = (cx - 400)/2;
+	int y = (cy - 400)/2;
 
 	DWORD dwStyle = WS_OVERLAPPEDWINDOW;
-	dwStyle = dwStyle & ~WS_THICKFRAME;
 	dwStyle = dwStyle & ~WS_MINIMIZEBOX;
 	dwStyle = dwStyle & ~WS_MAXIMIZEBOX;
 
-	HWND hWnd = ::CreateWindowEx(0, szClassName, _T("Win32 Game"), dwStyle,
-		x, y, width, height,
+	HWND hWnd = ::CreateWindowEx(0, szClassName, _T("Win32"), dwStyle,
+		x, y, 400, 400,
 		NULL, NULL, hInst, NULL);
-
-	if (hWnd == NULL)
-	{
-		return 2;
-	}
 
 	::ShowWindow(hWnd, SW_NORMAL);
 	::UpdateWindow(hWnd);
