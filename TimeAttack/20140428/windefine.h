@@ -4,8 +4,17 @@
 #include <windowsx.h>
 #include <tchar.h>
 
+enum state_id
+{
+	NONE,
+	OOO,
+	XXX,
+};
+
+
 LRESULT CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);
 
+void check(HDC hdc, const RECT& r, bool);
 
 /*
 20140423 : 0
