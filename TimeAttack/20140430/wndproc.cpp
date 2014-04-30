@@ -41,7 +41,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
 	const int count = 20;
 	static Data marble[count];
-	static RECT box = {0,0,0,0};
+	static RECT box[4] = {{0,0,0,0}};
 	static bool drag = false;
 
 	if (uMsg == WM_CREATE)
@@ -66,27 +66,47 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		::PostQuitMessage(0);
 		return 0;
 	}
+	else if (uMsg == WM_ERASEBKGND)
+	{
+		return 1;
+	}
 	else if (uMsg == WM_PAINT)
 	{
+		RECT rc;
+		::GetClientRect(hWnd, &rc);
+		int cx = rc.right - rc.left;
+		int cy = rc.bottom - rc.top;
+
 		PAINTSTRUCT ps;
 		HDC hdc = ::BeginPaint(hWnd, &ps);
 
+		HDC hMemDC = ::CreateCompatibleDC(hdc);
+		HBITMAP hMemBitmap = ::CreateCompatibleBitmap(hdc, cx, cy);
+		HBITMAP hOldBitmap = (HBITMAP)::SelectObject(hMemDC, hMemBitmap);
 
+		::SetDCBrushColor(hMemDC, RGB(255,255,255));
+		::FillRect(hMemDC, &rc, (HBRUSH)::GetStockObject(DC_BRUSH));
 
 		for (int i = 0; i < count; i++)
 		{
-			marble[i].Draw(hdc);
+			marble[i].Draw(hMemDC);
 		}
 
 		if (drag)
 		{
 			POINT pt;
-			::MoveToEx(hdc, box.left, box.top, &pt);
-			::LineTo(hdc, box.left, box.bottom);
-			::LineTo(hdc, box.right, box.bottom);
-			::LineTo(hdc, box.right, box.top);
-			::LineTo(hdc, box.left, box.top);
+			::MoveToEx(hMemDC, box[0].left, box[0].top, &pt);
+			::LineTo(hMemDC, box[0].left, box[0].bottom);
+			::LineTo(hMemDC, box[0].right, box[0].bottom);
+			::LineTo(hMemDC, box[0].right, box[0].top);
+			::LineTo(hMemDC, box[0].left, box[0].top);
 		}
+
+		::BitBlt(hdc, 0, 0, cx, cy, hMemDC, 0, 0, SRCCOPY);
+
+		::SelectObject(hMemDC, hOldBitmap);
+		::DeleteObject(hMemBitmap);
+		::DeleteDC(hMemDC);
 
 		::EndPaint(hWnd, &ps);
 		return 0;
@@ -99,13 +119,24 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 			::GetCursorPos(&ptMouse);
 			::ScreenToClient(hWnd, &ptMouse);
 
-			box.right = ptMouse.x;
-			box.bottom = ptMouse.y;
+			box[0].right = ptMouse.x;
+			box[0].bottom = ptMouse.y;
 
+			box[1].left = ptMouse.x;
+			box[1].top = ptMouse.y;
+
+			box[2].right = ptMouse.x;
+			box[2].top = ptMouse.y;
+
+			box[3].left = ptMouse.x;
+			box[3].bottom = ptMouse.y;
 
 			for (int i = 0; i < count; i++)
 			{
-				if (::PtInRect(&box, marble[i].center))
+				if (::PtInRect(&box[0], marble[i].center) ||
+					::PtInRect(&box[1], marble[i].center) ||
+					::PtInRect(&box[2], marble[i].center) ||
+					::PtInRect(&box[3], marble[i].center))
 				{
 					marble[i].select = true;
 				}
@@ -135,8 +166,17 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 			::GetCursorPos(&ptMouse);
 			::ScreenToClient(hWnd, &ptMouse);
 
-			box.left = ptMouse.x;
-			box.top = ptMouse.y;
+			box[0].left = ptMouse.x;
+			box[0].top = ptMouse.y;
+
+			box[1].right = ptMouse.x;
+			box[1].bottom = ptMouse.y;
+
+			box[2].left = ptMouse.x;
+			box[2].bottom = ptMouse.y;
+
+			box[3].right = ptMouse.x;
+			box[3].top = ptMouse.y;
 		}
 
 		drag = true;
