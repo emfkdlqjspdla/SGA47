@@ -3,9 +3,12 @@
 #include <windows.h>
 #include <tchar.h>
 #include <map>
+#include "Callable.h"
 
+template<typename T>
 class MainWindow
 {
+	typedef Callable<LRESULT,T,LRESULT(T::*)(HWND,UINT,WPARAM,LPARAM)> Action;
 	typedef std::map<UINT,Action> EvtMapType;
 
 public :
@@ -66,24 +69,28 @@ public :
 		if (hWnd == NULL)
 		{
 			DWORD dwError = ::GetLastError();
-			return 2;
+			return false;
 		}
 
 		::ShowWindow(hWnd, SW_NORMAL);
 		::UpdateWindow(hWnd);
+
+		return true;
 	}
 	LRESULT OnCreate(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
+		return 0;
 	}
 	LRESULT OnDestroy(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
+		return 0;
 	}
 	LRESULT EventHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		EvtMapType::iterator it = eventmap.find(uMsg);
 		if (it != eventmap.end())
 		{
-			return (*(it->second))(this, hWnd, uMsg, wParam, lParam);
+			return (it->second)(this, hWnd, uMsg, wParam, lParam);
 		}
 
 		return ::DefWindowProc(hWnd,uMsg,wParam,lParam);

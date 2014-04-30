@@ -2,7 +2,7 @@
 #include "mainwindow.h"
 
 class TestApp :
-	public MainWindow
+	public MainWindow<TestApp>
 {
 public:
 	TestApp(void);
