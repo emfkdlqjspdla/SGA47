@@ -12,7 +12,7 @@ struct Data
 	LONG speed; // 10pixel/s
 	Data()
 		: radius(20)
-		, update_dt(0), update_delay(100), speed(100)
+		, update_dt(0), update_delay(10), speed(100)
 	{
 		rc.left = rc.top = rc.right = rc.bottom = 0;
 		select = false;

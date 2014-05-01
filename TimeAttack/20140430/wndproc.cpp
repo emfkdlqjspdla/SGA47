@@ -69,7 +69,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		PAINTSTRUCT ps;
 		HDC hdc = ::BeginPaint(hWnd, &ps);
 
-		::SetDCBrushColor(hMemDC, RGB(255,200,200));
+		::SetDCBrushColor(hMemDC, RGB(200,200,255));
 		::FillRect(hMemDC, &rc, (HBRUSH)::GetStockObject(DC_BRUSH));
 
 		for (int i = 0; i < count; i++)
@@ -130,6 +130,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 			::ScreenToClient(hWnd, &ptMouse);
 
 			mb.SetStartPoint(ptMouse);
+			mb.SetEndPoint(ptMouse);
 		}
 
 		drag = true;
@@ -152,7 +153,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		::GetCursorPos(&ptMouse);
 		::ScreenToClient(hWnd, &ptMouse);
 
-		const int margin = 20;
+		const int margin = 10;
 
 		for (int i = 0; i < count; i++)
 		{

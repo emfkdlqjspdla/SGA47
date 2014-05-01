@@ -27,9 +27,23 @@ struct MouseBlock
 		hAlphaSrcDC = ::CreateCompatibleDC(hMainDC);
 		hAlphaBitmap = ::CreateCompatibleBitmap(hMainDC, cx, cy);
 		hOldAlphaBitmap = (HBITMAP)::SelectObject(hAlphaSrcDC, hAlphaBitmap);
+
+		HBRUSH hBrush = ::CreateSolidBrush(RGB(100,149,237));
+		HBRUSH hOldBrush = (HBRUSH)::SelectObject(hTransSrcDC, hBrush);
+
+		HPEN hPen = ::CreatePen(PS_SOLID, 2, RGB(0,255,255));
+		HPEN hOldPen = (HPEN)::SelectObject(hTransSrcDC, hPen);
+
+
 	}
 	void Detach()
 	{
+		::SelectObject(hTransSrcDC, hOldPen);
+		::DeleteObject(hPen);
+
+		::SelectObject(hTransSrcDC, hOldBrush);
+		::DeleteObject(hBrush);
+
 		::SelectObject(hAlphaSrcDC, hOldAlphaBitmap);
 		::DeleteObject(hAlphaBitmap);
 		::DeleteDC(hAlphaSrcDC);
@@ -80,19 +94,7 @@ struct MouseBlock
 		::SetDCBrushColor(hTransSrcDC, RGB(255,255,255));
 		::FillRect(hTransSrcDC, &rc, (HBRUSH)::GetStockObject(DC_BRUSH));
 
-		HBRUSH hBrush = ::CreateSolidBrush(RGB(100,149,237));
-		HBRUSH hOldBrush = (HBRUSH)::SelectObject(hTransSrcDC, hBrush);
-
-		HPEN hPen = ::CreatePen(PS_SOLID, 2, RGB(0,255,255));
-		HPEN hOldPen = (HPEN)::SelectObject(hTransSrcDC, hPen);
-
 		::Rectangle(hTransSrcDC, box.left, box.top, box.right, box.bottom);
-
-		::SelectObject(hTransSrcDC, hOldPen);
-		::DeleteObject(hPen);
-
-		::SelectObject(hTransSrcDC, hOldBrush);
-		::DeleteObject(hBrush);
 
 		::GdiTransparentBlt(hAlphaSrcDC, 0, 0, cx, cy,
 			hTransSrcDC, 0, 0, cx, cy, RGB(255,255,255));
@@ -118,6 +120,12 @@ private :
 	RECT rc;
 	int cx;
 	int cy;
+	////////////////////////////////////
+	// brush pen
+	HBRUSH hBrush;
+	HBRUSH hOldBrush;
+	HPEN hPen;
+	HPEN hOldPen;
 
 	////////////////////////////////////
 	// transparent
