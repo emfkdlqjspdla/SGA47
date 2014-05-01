@@ -62,6 +62,7 @@ INT WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, INT)
 		}
 		if (msg.message == WM_QUIT)
 			break;
+
 	}
 	return msg.wParam;
 }
