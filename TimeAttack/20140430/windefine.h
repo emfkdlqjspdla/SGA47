@@ -6,6 +6,9 @@
 #include <time.h>
 #include <stdlib.h>
 
+#include "Data.h"
+#include "MouseBlock.h"
+
 LRESULT CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);
 
 

@@ -119,16 +119,6 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 		marble[0]->SetCenter(ptMouse);
 
-		//POINT tmp = marble[0]->follow(ptMouse);
-		//for (int i = 0; i < count-1; i++)
-		//{
-		//	tmp = marble[i+1]->follow(tmp);
-		//}
-
-		RECT rc;
-		::GetClientRect(hWnd, &rc);
-		::InvalidateRect(hWnd, &rc, TRUE);
-
 		return 0;
 	}
 	else if (uMsg == WM_TIMER)

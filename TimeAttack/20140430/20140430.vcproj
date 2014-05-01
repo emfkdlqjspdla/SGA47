@@ -185,6 +185,14 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\Data.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MouseBlock.h"
+				>
+			</File>
+			<File
 				RelativePath=".\windefine.h"
 				>
 			</File>
