@@ -4,6 +4,8 @@
 #include <windowsx.h>
 #include <tchar.h>
 #include <sstream> // istringstream, ostringstream
+#include <time.h>
+#include <stdlib.h>
 #include "Circle.h"
 
 LRESULT CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);

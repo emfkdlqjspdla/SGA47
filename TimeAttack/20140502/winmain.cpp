@@ -2,6 +2,8 @@
 
 INT WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, INT)
 {
+	srand((unsigned)time(NULL));
+
 	LPCTSTR szClassName = _T("MyMainWindowClass");
 
 	WNDCLASSEX wcex = {0};

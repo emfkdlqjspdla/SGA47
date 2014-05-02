@@ -8,9 +8,15 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 	static POINT ept;
 	static POINT spt;
 	static bool drag = false;
+	static HBITMAP hCursor;
+	static RECT rcCursor = {3,3,42,43};
+	static POINT ptMouse;
 
 	if (uMsg == WM_CREATE)
 	{
+		hCursor = (HBITMAP)::LoadImage(NULL, _T("cursor.bmp"), IMAGE_BITMAP, 0, 0,
+			LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_SHARED);
+
 		RECT rc;
 		::GetClientRect(hWnd, &rc);
 		::InflateRect(&rc, -20, -20);
@@ -27,10 +33,16 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 			marble[i].select = false;
 		}
 
+		::ShowCursor(FALSE);
+
 		return 0;
 	}
 	else if (uMsg == WM_DESTROY)
 	{
+		::ShowCursor(TRUE);
+
+		::DeleteObject(hCursor);
+
 		::PostQuitMessage(0);
 		return 0;
 	}
@@ -94,12 +106,26 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 			::LineTo(hdc, box.left, box.top);
 		}
 
+		HDC hBitmapDC = ::CreateCompatibleDC(hdc);
+		HBITMAP hOldBitmap = (HBITMAP)::SelectObject(hBitmapDC, hCursor);
+
+		// draw
+		::GdiTransparentBlt(hdc, ptMouse.x - 20, ptMouse.y - 20, 40, 41,
+			hBitmapDC, rcCursor.left, rcCursor.top, rcCursor.right-rcCursor.left,
+			rcCursor.bottom-rcCursor.top, RGB(0,0,255));
+
+		::SelectObject(hBitmapDC, hOldBitmap);
+		::DeleteDC(hBitmapDC);
+
 		::EndPaint(hWnd, &ps);
 
 		return 0;
 	}
 	else if (uMsg == WM_MOUSEMOVE)
 	{
+		::GetCursorPos(&ptMouse);
+		::ScreenToClient(hWnd, &ptMouse);
+
 		if (drag)
 		{
 			::GetCursorPos(&ept);
@@ -139,10 +165,11 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 				}
 			}
 
-			RECT rc;
-			::GetClientRect(hWnd, &rc);
-			::InvalidateRect(hWnd, &rc, TRUE);
 		}
+
+		RECT rc;
+		::GetClientRect(hWnd, &rc);
+		::InvalidateRect(hWnd, &rc, TRUE);
 
 		return 0;
 	}
