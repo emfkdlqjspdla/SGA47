@@ -74,21 +74,24 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 	}
 	else if (uMsg == WM_MOUSEMOVE)
 	{
-		::GetCursorPos(&ptMouse);
-		::ScreenToClient(hWnd, &ptMouse);
+		if (bClipMouse)
+		{
+			::GetCursorPos(&ptMouse);
+			::ScreenToClient(hWnd, &ptMouse);
 
-		const int margin = 10;
-		RECT rc;
-		::GetClientRect(hWnd, &rc);
+			const int margin = 10;
+			RECT rc;
+			::GetClientRect(hWnd, &rc);
 
-		if (rc.top + margin > ptMouse.y || rc.bottom - margin < ptMouse.y)
-			MouseState = CURSOR_VERT;
-		else if (rc.left + margin > ptMouse.x || rc.right - margin < ptMouse.x)
-			MouseState = CURSOR_HORT;
-		else
-			MouseState = CURSOR_NORMAL;
+			if (rc.top + margin > ptMouse.y || rc.bottom - margin < ptMouse.y)
+				MouseState = CURSOR_VERT;
+			else if (rc.left + margin > ptMouse.x || rc.right - margin < ptMouse.x)
+				MouseState = CURSOR_HORT;
+			else
+				MouseState = CURSOR_NORMAL;
 
-		::InvalidateRect(hWnd, &rc, TRUE);
+			::InvalidateRect(hWnd, &rc, TRUE);
+		}
 
 		return 0;
 	}
