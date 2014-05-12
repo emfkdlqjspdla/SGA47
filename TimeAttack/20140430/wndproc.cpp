@@ -11,6 +11,9 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 	static MouseBlock mb;
 	static DWORD dt = 0;
 	static DWORD st = ::GetTickCount();
+	static HBITMAP hCursor;
+	static RECT rcCursor = {3,3,42,43};
+	static POINT ptMouse;
 
 	////////////////////////////////////
 	// double buffering
@@ -21,6 +24,9 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 	if (uMsg == WM_CREATE)
 	{
+		hCursor = (HBITMAP)::LoadImage(NULL, _T("cursor.bmp"), IMAGE_BITMAP, 0, 0,
+			LR_LOADFROMFILE | LR_CREATEDIBSECTION | LR_SHARED);
+
 		RECT rc;
 		::GetClientRect(hWnd, &rc);
 		::InflateRect(&rc, -50, -50);
@@ -41,10 +47,16 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 		mb.Attach(hWnd);
 
+		::ShowCursor(FALSE);
+
 		return 0;
 	}
 	else if (uMsg == WM_DESTROY)
 	{
+		::ShowCursor(TRUE);
+
+		::DeleteObject(hCursor);
+
 		mb.Detach();
 
 		::SelectObject(hMemDC, hOldMemBitmap);
@@ -82,6 +94,17 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 			mb.Draw(hMemDC);
 		}
 
+		HDC hBitmapDC = ::CreateCompatibleDC(hdc);
+		HBITMAP hOldBitmap = (HBITMAP)::SelectObject(hBitmapDC, hCursor);
+
+		// draw
+		::GdiTransparentBlt(hMemDC, ptMouse.x - 20, ptMouse.y - 20, 40, 41,
+			hBitmapDC, rcCursor.left, rcCursor.top, rcCursor.right-rcCursor.left,
+			rcCursor.bottom-rcCursor.top, RGB(0,0,255));
+
+		::SelectObject(hBitmapDC, hOldBitmap);
+		::DeleteDC(hBitmapDC);
+
 		::BitBlt(hdc, 0, 0, cx, cy, hMemDC, 0, 0, SRCCOPY);
 
 		::EndPaint(hWnd, &ps);
@@ -89,11 +112,11 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 	}
 	else if (uMsg == WM_MOUSEMOVE)
 	{
+		::GetCursorPos(&ptMouse);
+		::ScreenToClient(hWnd, &ptMouse);
+
 		if (drag)
 		{
-			POINT ptMouse;
-			::GetCursorPos(&ptMouse);
-			::ScreenToClient(hWnd, &ptMouse);
 
 			mb.SetEndPoint(ptMouse);
 
@@ -109,10 +132,11 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 				}
 			}
 
-			RECT rc;
-			::GetClientRect(hWnd, &rc);
-			::InvalidateRect(hWnd, &rc, TRUE);
 		}
+
+		RECT rc;
+		::GetClientRect(hWnd, &rc);
+		::InvalidateRect(hWnd, &rc, TRUE);
 
 		return 0;
 	}

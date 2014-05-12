@@ -2,7 +2,7 @@
 
 INT WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, INT)
 {
-	::srand((unsigned)time(NULL));
+	srand((unsigned)time(NULL));
 
 	LPCTSTR szClassName = _T("MyMainWindowClass");
 
@@ -29,8 +29,8 @@ INT WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, INT)
 	int cx = ::GetSystemMetrics(SM_CXSCREEN);
 	int cy = ::GetSystemMetrics(SM_CYSCREEN);
 
-	int width = 800;
-	int height = 600;
+	int width = 500;
+	int height = 500;
 
 	int x = (cx - width)/2;
 	int y = (cy - height)/2;

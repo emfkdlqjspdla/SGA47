@@ -139,6 +139,14 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 
 		return 0;
 	}
+	else if (uMsg == WM_KEYDOWN)
+	{
+		if ((::GetAsyncKeyState(VK_ESCAPE) & 0x8000) == 0x8000)
+		{
+		}
+
+		return 0;
+	}
 
 	return ::DefWindowProc(hWnd,uMsg,wParam,lParam);
 }

@@ -3,6 +3,7 @@
 #include <windows.h>
 #include <windowsx.h>
 #include <tchar.h>
+#include "BaseType.h"
 
 LRESULT CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);
 
@@ -16,5 +17,4 @@ LRESULT CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);
 20140430 : 0
 20140501 : 0
 20140502 : 0
-20140508 : 3
 */

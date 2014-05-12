@@ -1,9 +1,8 @@
 ﻿#include "windefine.h"
+#include "MainGame.h"
 
 INT WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, INT)
 {
-	::srand((unsigned)time(NULL));
-
 	LPCTSTR szClassName = _T("MyMainWindowClass");
 
 	WNDCLASSEX wcex = {0};
@@ -29,18 +28,18 @@ INT WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, INT)
 	int cx = ::GetSystemMetrics(SM_CXSCREEN);
 	int cy = ::GetSystemMetrics(SM_CYSCREEN);
 
-	int width = 800;
-	int height = 600;
+	int width = 500;
+	int height = 400;
 
 	int x = (cx - width)/2;
 	int y = (cy - height)/2;
 
 	DWORD dwStyle = WS_OVERLAPPEDWINDOW;
 	dwStyle = dwStyle & ~WS_THICKFRAME;
-	dwStyle = dwStyle & ~WS_MINIMIZEBOX;
+	//dwStyle = dwStyle & ~WS_MINIMIZEBOX;
 	dwStyle = dwStyle & ~WS_MAXIMIZEBOX;
 
-	HWND hWnd = ::CreateWindowEx(0, szClassName, _T("Win32 Game"), dwStyle,
+	HWND hWnd = ::CreateWindowEx(0, szClassName, _T("Win32 Mouse"), dwStyle,
 		x, y, width, height,
 		NULL, NULL, hInst, NULL);
 
@@ -52,8 +51,27 @@ INT WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, INT)
 	::ShowWindow(hWnd, SW_NORMAL);
 	::UpdateWindow(hWnd);
 
+	RECT rc;
+	::GetClientRect(hWnd, &rc);
+	POINT lt = {rc.left, rc.top};
+	POINT rb = {rc.right, rc.bottom};
+
+	::ClientToScreen(hWnd, &lt);
+	::ClientToScreen(hWnd, &rb);
+
+	RECT rcScreen = {lt.x, lt.y, rb.x, rb.y};
+
+	::ClipCursor(&rcScreen);
+
 
 	MSG msg;
+
+	MainGame mg;
+	mg.Attach(hWnd);
+	mg.Load();
+
+	DWORD dt = 0;
+	DWORD st = ::GetTickCount();
 
 	while (true)
 	{
@@ -64,6 +82,13 @@ INT WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, INT)
 		}
 		if (msg.message == WM_QUIT)
 			break;
+
+		mg.Input(dt);
+		mg.Update(dt);
+		mg.Draw();
+
+		dt = ::GetTickCount() - st;
+		st = ::GetTickCount();
 	}
 	return msg.wParam;
 }
