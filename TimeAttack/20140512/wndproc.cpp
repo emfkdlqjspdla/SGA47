@@ -71,7 +71,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 			{
 				if (StarDepot[i] == NULL)
 				{
-					StarDepot[i] = new Star(5);
+					StarDepot[i] = new Star(rand()%10 + 1);
 					break;
 				}
 			}

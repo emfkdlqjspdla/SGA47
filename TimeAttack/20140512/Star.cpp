@@ -46,7 +46,8 @@ void Star::Draw(HDC hdc)
 	HDC hBitmapDC = ::CreateCompatibleDC(hdc);
 	HBITMAP hOldBitmap = (HBITMAP)::SelectObject(hBitmapDC, hStar);
 
-	::GdiTransparentBlt(hdc, pos.x - drawSize.cx/2, pos.y - drawSize.cy/2,
+	::GdiTransparentBlt(hdc,
+		pos.x - drawSize.cx/2, pos.y - drawSize.cy/2,
 		drawSize.cx, drawSize.cy,
 		hBitmapDC, 0, 0, size.cx, size.cy, RGB(255,255,255));
 
