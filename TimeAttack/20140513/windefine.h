@@ -4,6 +4,8 @@
 #include <windowsx.h>
 #include <tchar.h>
 #include "BaseType.h"
+#include "Utility.hpp"
+#include "Image.h"
 
 LRESULT CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);
 

@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="TimeAttack"
-	ProjectGUID="{3DA3D71C-72EA-4664-B8CD-56CA6C63F627}"
-	RootNamespace="TimeAttack"
+	Name="20140513"
+	ProjectGUID="{B18A3744-E19E-44E4-816A-FDA0826381AF}"
+	RootNamespace="My20140513"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -204,6 +204,18 @@
 			</File>
 			<File
 				RelativePath=".\BaseType.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Image.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Image.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Utility.hpp"
 				>
 			</File>
 		</Filter>
