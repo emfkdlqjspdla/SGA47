@@ -6,6 +6,8 @@ MainGame::MainGame()
 , hMemDC(NULL)
 , hMemBitmap(NULL)
 , hOldMemBitmap(NULL)
+, st(0)
+, dt(0)
 {
 	for (int i = 0; i < CURSOR_MAX; i++)
 	{
@@ -15,6 +17,8 @@ MainGame::MainGame()
 	hGray = NULL;
 	MouseState = CURSOR_NORMAL;
 	bClipMouse = true;
+
+	st = ::GetTickCount();
 }
 MainGame::~MainGame()
 {
@@ -129,6 +133,16 @@ void MainGame::Draw(void)
 		::SelectObject(hGrayDC, hOldBitmap);
 		::DeleteDC(hGrayDC);
 	}
+
+	TCHAR szBuffer[100];
+
+	_stprintf_s(szBuffer, _T("dt : %010d\r\nst : %010d"), dt, st);
+
+	::DrawText(hMemDC, szBuffer, -1, &rc, DT_LEFT | DT_TOP);
+
+	dt = ::GetTickCount() - st;
+	st = ::GetTickCount();
+
 
 	::BitBlt(hMainDC, 0, 0, rc.width(), rc.height(), hMemDC, 0, 0, SRCCOPY);
 

@@ -38,6 +38,8 @@ private :
 	HBITMAP hOldMemBitmap;
 
 private :
+	DWORD dt;
+	DWORD st;
 	HBITMAP hSample[CURSOR_MAX];
 	HBITMAP hBlock;
 	HBITMAP hGray;
