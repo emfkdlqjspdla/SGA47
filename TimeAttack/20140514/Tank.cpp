@@ -23,11 +23,11 @@ void Tank::Input(DWORD tick)
 	{
 		if (InputDevice[VK_LEFT])
 		{
-			theta -= 1;
+			theta -= 5;
 		}
 		if (InputDevice[VK_RIGHT])
 		{
-			theta += 1;
+			theta += 5;
 		}
 		if (InputDevice[VK_UP])
 		{
