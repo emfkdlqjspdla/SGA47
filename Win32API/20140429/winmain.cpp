@@ -1,14 +1,17 @@
 ﻿#include <windows.h>
 #include <tchar.h>
-#include "TestApp.h"
+#include "Test2App.h"
 
 INT WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, INT)
 {
-	TestApp app;
+	Test2App app;
 
 	app.Setup(hInst);
 
 	MSG msg;
+
+	DWORD dt = 1;
+	DWORD st = ::GetTickCount();
 	while (true)
 	{
 		if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -18,6 +21,13 @@ INT WINAPI _tWinMain(HINSTANCE hInst, HINSTANCE, LPTSTR, INT)
 		}
 		if (msg.message == WM_QUIT)
 			break;
+
+		app.Input(dt);
+		app.Update(dt);
+		app.Draw(dt);
+
+		dt = ::GetTickCount() - st;
+		st = ::GetTickCount();
 	}
 
 	return msg.wParam;
