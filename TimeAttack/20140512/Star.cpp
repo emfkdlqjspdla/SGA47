@@ -13,7 +13,7 @@ Star::Star(const LONG& _speed)
 	LONG diff = rand()%20;
 	drawSize = size*3/5 + Size(diff, diff);
 
-	pos = Point(200, 200);
+	pos = Point(rand()%400, 0);
 }
 Star::~Star()
 {
