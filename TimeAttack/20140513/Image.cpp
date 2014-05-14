@@ -2,6 +2,7 @@
 
 Image::Image()
 : hBitmap(NULL)
+, alpha(255)
 {
 }
 Image::~Image()
@@ -49,14 +50,14 @@ void Image::Draw(HDC hdc)
 	bf.AlphaFormat = AC_SRC_OVER;
 	bf.BlendFlags = 0;
 	bf.BlendOp = 0;
-	bf.SourceConstantAlpha = 255;
+	bf.SourceConstantAlpha = alpha;
 
 	::GdiAlphaBlend(hdc,
 		rcDraw.left, rcDraw.top,
 		rcDraw.width(), rcDraw.height(),
 		hBitmapDC,
 		rcSrc.left, rcSrc.top,
-		rcSrc.width(), rcDraw.height(),
+		rcSrc.width(), rcSrc.height(),
 		bf);
 
 	::SelectObject(hBitmapDC, hOldBitmap);
@@ -65,4 +66,8 @@ void Image::Draw(HDC hdc)
 void Image::SetDrawRect(const Rect& rc)
 {
 	rcDraw = rc;
+}
+void Image::SetAlphaValue(const BYTE& _alpha)
+{
+	alpha = _alpha;
 }

@@ -16,9 +16,11 @@ public :
 	void Draw(HDC hdc);
 
 	void SetDrawRect(const Rect& rc);
+	void SetAlphaValue(const BYTE& _alpha);
 
 private :
 	HBITMAP hBitmap;
 	Rect rcDraw;
 	Rect rcSrc;
+	BYTE alpha;
 };
