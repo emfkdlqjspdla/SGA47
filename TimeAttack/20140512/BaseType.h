@@ -15,6 +15,8 @@ struct Size : public SIZE
 	Size(const LONG& _cx = 0, const LONG& _cy = 0);
 	friend Size operator * (const LONG& v, const Size& obj);
 	friend Size operator * (const Size& obj, const LONG& v);
+	friend Size operator * (const float& v, const Size& obj);
+	friend Size operator * (const Size& obj, const float& v);
 	friend Size operator / (const Size& obj, const LONG& v);
 	friend Size operator + (const Size& lhs, const Size& rhs);
 };

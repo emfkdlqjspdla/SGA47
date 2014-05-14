@@ -2,13 +2,12 @@
 
 LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
-	static bool bShootingStar = false;
-	static Star* StarDepot[100] = {NULL};
+	static std::list<Star*> StarDepot;
 	static DWORD dt = 0;
 	static DWORD st = 0;
 
 	static DWORD update_dt = 0;
-	static DWORD delay = 400;
+	static DWORD delay = 10;
 
 	// double buffering
 	static HDC hMainDC = NULL;
@@ -16,8 +15,15 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 	static HBITMAP hMemBitmap = NULL;
 	static HBITMAP hOldMemBitmap = NULL;
 
+	static Point ptMouse;
+
+	// Critical Section
+	static CRITICAL_SECTION cs;
+
 	if (uMsg == WM_CREATE)
 	{
+		::InitializeCriticalSection(&cs);
+
 		Rect rc;
 		::GetClientRect(hWnd, &rc);
 
@@ -26,53 +32,68 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		hMemBitmap = ::CreateCompatibleBitmap(hMainDC, rc.width(), rc.height());
 		hOldMemBitmap = (HBITMAP)::SelectObject(hMemDC, hMemBitmap);
 
+		dt = 0;
+		st = ::GetTickCount();
+		::SetTimer(hWnd, 0, 10, NULL);
+
 		return 0;
 	}
 	else if (uMsg == WM_DESTROY)
 	{
+		::KillTimer(hWnd, 0);
+
 		::SelectObject(hMemDC, hOldMemBitmap);
 		::DeleteObject(hMemBitmap);
 		::DeleteDC(hMemDC);
 		::ReleaseDC(hWnd, hMainDC);
 
+		::DeleteCriticalSection(&cs);
+
 		::PostQuitMessage(0);
 		return 0;
 	}
-	else if (uMsg == WM_LBUTTONDOWN)
+	else if (uMsg == WM_MOUSEMOVE)
 	{
-		bShootingStar = !bShootingStar;
-
-		if (bShootingStar)
-		{
-			st = ::GetTickCount();
-
-			::SetTimer(hWnd, 0, 10, NULL);
-		}
-		else
-		{
-			::KillTimer(hWnd, 0);
-		}
+		::GetCursorPos(&ptMouse);
 
 		return 0;
 	}
 	else if (uMsg == WM_TIMER)
 	{
-		for (int i = 0; i < 100; i++)
-		{
-			if (StarDepot[i])
-			{
-				StarDepot[i]->Update(dt);
-			}
-		}
+		Rect rc;
+		::GetClientRect(hWnd, &rc);
 
 		if (update_dt > delay)
 		{
-			for (int i = 0; i < 100; i++)
+			int count = update_dt/delay;
+
+			for (int i = 0; i < count; i++)
 			{
-				if (StarDepot[i] == NULL)
+				std::list<Star*>::iterator it;
+				for (it = StarDepot.begin(); it != StarDepot.end(); it++)
 				{
-					StarDepot[i] = new Star(rand()%10 + 1);
-					break;
+					(*it)->Update(dt);
+				}
+
+				Star* pStar = new Star(ptMouse.ToClient(hWnd), rand()%10 + 5, rand()%360);
+
+				//::EnterCriticalSection(&cs);
+				StarDepot.push_back(pStar);
+				//::LeaveCriticalSection(&cs);
+
+				for (it = StarDepot.begin(); it != StarDepot.end();)
+				{
+					if (!::PtInRect(&rc, (*it)->GetPosition()))
+					{
+						//::EnterCriticalSection(&cs);
+						delete *it;
+						it = StarDepot.erase(it);
+						//::LeaveCriticalSection(&cs);
+					}
+					else
+					{
+						it++;
+					}
 				}
 			}
 
@@ -84,8 +105,6 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		dt = ::GetTickCount() - st;
 		st = ::GetTickCount();
 
-		Rect rc;
-		::GetClientRect(hWnd, &rc);
 		::InvalidateRect(hWnd, &rc, TRUE);
 
 		return 0;
@@ -101,12 +120,10 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		::SetDCBrushColor(hMemDC, RGB(0,0,0));
 		::FillRect(hMemDC, &rc, (HBRUSH)::GetStockObject(DC_BRUSH));
 
-		for (int i = 0; i < 100; i++)
+		std::list<Star*>::iterator it;
+		for (it = StarDepot.begin(); it != StarDepot.end(); it++)
 		{
-			if (StarDepot[i])
-			{
-				StarDepot[i]->Draw(hMemDC);
-			}
+			(*it)->Draw(hMemDC);
 		}
 
 		// draw memory dc contents to real monitor.

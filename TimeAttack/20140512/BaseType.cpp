@@ -27,6 +27,14 @@ Size::Size(const LONG& _cx/*=0*/, const LONG& _cy/*=0*/)
 	cx = _cx;
 	cy = _cy;
 }
+Size operator * (const float& v, const Size& obj)
+{
+	return Size(obj.cx*v, obj.cy*v);
+}
+Size operator * (const Size& obj, const float& v)
+{
+	return Size(obj.cx*v, obj.cy*v);
+}
 Size operator * (const LONG& v, const Size& obj)
 {
 	return Size(obj.cx*v, obj.cy*v);

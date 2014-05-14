@@ -115,7 +115,7 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -171,10 +171,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\BaseType.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Star.cpp"
 				>
 			</File>
@@ -193,10 +189,6 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\BaseType.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Star.h"
 				>
 			</File>
@@ -210,6 +202,18 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+		</Filter>
+		<Filter
+			Name="Base"
+			>
+			<File
+				RelativePath=".\BaseType.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BaseType.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
