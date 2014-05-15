@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="GameDev"
-	ProjectGUID="{374A0492-CFE9-4582-9F2C-2BC2899EB989}"
-	RootNamespace="GameDev"
+	Name="20140515"
+	ProjectGUID="{EF4A40E6-B569-4D06-9E21-DFCB53534810}"
+	RootNamespace="My20140515"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -20,7 +20,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="4"
+			ConfigurationType="1"
 			CharacterSet="1"
 			>
 			<Tool
@@ -59,10 +59,17 @@
 				Name="VCPreLinkEventTool"
 			/>
 			<Tool
-				Name="VCLibrarianTool"
+				Name="VCLinkerTool"
+				LinkIncremental="2"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -74,9 +81,10 @@
 				Name="VCFxCopTool"
 			/>
 			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
 				Name="VCPostBuildEventTool"
-				Description="GameDev Library 를 복사하고 있습니다."
-				CommandLine="copy /y &quot;$(TargetPath)&quot; &quot;$(ProjectDir)&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -163,7 +171,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\TestApp.cpp"
+				RelativePath=".\Image.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\winmain.cpp"
 				>
 			</File>
 		</Filter>
@@ -173,11 +185,15 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\TestApp.h"
+				RelativePath=".\Animation.h"
 				>
 			</File>
 			<File
-				RelativePath=".\winmain.cpp"
+				RelativePath=".\Image.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TodayApp.h"
 				>
 			</File>
 		</Filter>
@@ -186,70 +202,6 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-		</Filter>
-		<Filter
-			Name="Base"
-			>
-			<File
-				RelativePath=".\GameDev.h"
-				>
-			</File>
-			<Filter
-				Name="utility"
-				>
-				<File
-					RelativePath=".\BaseType.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\BaseType.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Callable.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\DoubleBuffer.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\DoubleBuffer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\InputDevice.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\InputDevice.h"
-					>
-				</File>
-				<File
-					RelativePath=".\MainWindow.hpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Utility.hpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="control"
-				>
-				<File
-					RelativePath=".\Control.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Control.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Graphic"
-				>
-			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

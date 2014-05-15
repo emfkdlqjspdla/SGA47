@@ -33,6 +33,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "20140514", "20140514\201405
 		{374A0492-CFE9-4582-9F2C-2BC2899EB989} = {374A0492-CFE9-4582-9F2C-2BC2899EB989}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "20140515", "20140515\20140515.vcproj", "{EF4A40E6-B569-4D06-9E21-DFCB53534810}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetworkApp", "NetworkApp\NetworkApp.vcproj", "{EBAB5723-183F-44AA-864E-7AB03FD2E22F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -91,6 +95,14 @@ Global
 		{AD5BE563-A8FC-496A-836B-E691B6D968AA}.Debug|Win32.Build.0 = Debug|Win32
 		{AD5BE563-A8FC-496A-836B-E691B6D968AA}.Release|Win32.ActiveCfg = Release|Win32
 		{AD5BE563-A8FC-496A-836B-E691B6D968AA}.Release|Win32.Build.0 = Release|Win32
+		{EF4A40E6-B569-4D06-9E21-DFCB53534810}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EF4A40E6-B569-4D06-9E21-DFCB53534810}.Debug|Win32.Build.0 = Debug|Win32
+		{EF4A40E6-B569-4D06-9E21-DFCB53534810}.Release|Win32.ActiveCfg = Release|Win32
+		{EF4A40E6-B569-4D06-9E21-DFCB53534810}.Release|Win32.Build.0 = Release|Win32
+		{EBAB5723-183F-44AA-864E-7AB03FD2E22F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EBAB5723-183F-44AA-864E-7AB03FD2E22F}.Debug|Win32.Build.0 = Debug|Win32
+		{EBAB5723-183F-44AA-864E-7AB03FD2E22F}.Release|Win32.ActiveCfg = Release|Win32
+		{EBAB5723-183F-44AA-864E-7AB03FD2E22F}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
