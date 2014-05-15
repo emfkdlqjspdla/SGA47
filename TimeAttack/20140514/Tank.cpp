@@ -23,19 +23,27 @@ void Tank::Input(DWORD tick)
 	{
 		if (InputDevice[VK_LEFT])
 		{
-			theta -= 5;
+			theta -= 10;
+			if (theta == -360)
+				theta = 0;
 		}
 		if (InputDevice[VK_RIGHT])
 		{
-			theta += 5;
+			theta += 10;
+			if (theta == 360)
+				theta = 0;
 		}
 		if (InputDevice[VK_UP])
 		{
-			center.y -= 5;
+			center.x = center.x + 5*cos((90-theta)*D2R);
+			center.y = center.y - 5*sin((90-theta)*D2R);
+			//center.y -= 5;
 		}
 		if (InputDevice[VK_DOWN])
 		{
-			center.y += 5;
+			center.x = center.x - 5*cos((90-theta)*D2R);
+			center.y = center.y + 5*sin((90-theta)*D2R);
+			//center.y += 5;
 		}
 		if (InputDevice[VK_SPACE])
 		{
