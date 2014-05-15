@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <windows.h>
+
 template<typename T>
 class singleton
 {
@@ -14,3 +16,9 @@ public :
 		return inst;
 	}
 };
+
+template<typename GDIObject>
+GDIObject Select(HDC hdc, GDIObject obj)
+{
+	return (GDIObject)::SelectObject(hdc, obj);
+}

@@ -1,5 +1,8 @@
 ﻿#include "BaseType.h"
 
+///////////////////////////////////////////////////////////////
+// Point
+///////////////////////////////////////////////////////////////
 Point::Point(const LONG& _x/*=0*/, const LONG& _y/*=0*/)
 {
 	x = _x;
@@ -29,11 +32,22 @@ Point Point::operator >> (const Size& cs)
 {
 	return Point(x + cs.cx, y + cs.cy);
 }
+Point Point::operator - (const Point& o)
+{
+	return Point(x - o.x, y - o.y);
+}
 
+///////////////////////////////////////////////////////////////
+// Size
+///////////////////////////////////////////////////////////////
 Size::Size(const LONG& _cx/*=0*/, const LONG& _cy/*=0*/)
 {
 	cx = _cx;
 	cy = _cy;
+}
+Size Size::operator - ()
+{
+	return Size(-cx, -cy);
 }
 Size operator * (const LONG& v, const Size& obj)
 {
@@ -52,6 +66,9 @@ Size operator * (const Size& obj, const float& v)
 	return Size(LONG(obj.cx*v), LONG(obj.cy*v));
 }
 
+///////////////////////////////////////////////////////////////
+// Rect
+///////////////////////////////////////////////////////////////
 Rect::Rect(const LONG& l/*=0*/, const LONG& t/*=0*/, const LONG& r/*=0*/, const LONG& b/*=0*/)
 {
 	left = l;
@@ -107,6 +124,10 @@ Rect Rect::ToClient(HWND hWnd)
 
 	return Rect(lt.ToClient(hWnd), rb.ToClient(hWnd));
 }
+Rect Rect::Inflate(const Size& diff) const
+{
+	return Rect(left - diff.cx, top - diff.cy, right + diff.cx, bottom + diff.cy);
+}
 Rect Rect::Offset(const Size& diff) const
 {
 	return Rect(left + diff.cx, top + diff.cy, right + diff.cx, bottom + diff.cy);
@@ -120,4 +141,77 @@ Rect Rect::operator >> (const Size& diff) const
 	return Rect(left + diff.cx, top + diff.cy, right + diff.cx, bottom + diff.cy);
 }
 
+///////////////////////////////////////////////////////////////
+// Color
+///////////////////////////////////////////////////////////////
 
+Color::Color(const COLORREF& _clr/* = RGB(255,255,255)*/)
+: clr(_clr), diff(10)
+{
+}
+Color::Color(const char* szColor)
+: diff(10)
+{
+	clr = s2d(szColor);
+}
+// 16진수를 뜻하는 문자를 숫자로 변환하여 반환.
+int Color::c2d(const char& c)
+{
+	if (c >= '0' && c <= '9')
+		return int(c-'0');
+	else if (c >= 'a' && c <= 'f')
+		return int(c-'a' + 10);
+	else if (c >= 'A' && c <= 'F')
+		return int(c-'A' + 10);
+
+	return 0;
+}
+COLORREF Color::s2d(const char* s)
+{
+	BYTE r, g, b;
+	r = c2d(s[0])*16 + c2d(s[1]);
+	g = c2d(s[2])*16 + c2d(s[3]);
+	b = c2d(s[4])*16 + c2d(s[5]);
+
+	return RGB(r,g,b);
+}
+Color::operator COLORREF ()
+{
+	return clr;
+}
+Color& Color::operator ++ ()
+{
+	BYTE r = min(255, GetRValue(clr)+diff);
+	BYTE g = min(255, GetGValue(clr)+diff);
+	BYTE b = min(255, GetBValue(clr)+diff);
+
+	clr = RGB(r,g,b);
+
+	return *this;
+}
+Color Color::operator ++ (int)
+{
+	Color tmp(*this);
+
+	++(*this);
+
+	return tmp;
+}
+Color& Color::operator -- ()
+{
+	BYTE r = max(0, GetRValue(clr)-diff);
+	BYTE g = max(0, GetGValue(clr)-diff);
+	BYTE b = max(0, GetBValue(clr)-diff);
+
+	clr = RGB(r,g,b);
+
+	return *this;
+}
+Color Color::operator -- (int)
+{
+	Color tmp(*this);
+
+	--(*this);
+
+	return tmp;
+}

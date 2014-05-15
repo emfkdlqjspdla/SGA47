@@ -4,6 +4,7 @@
 #include <tchar.h>
 #include <map>
 #include "Callable.hpp"
+#include "DoubleBuffer.h"
 
 template<typename T>
 class MainWindow
@@ -19,6 +20,8 @@ public :
 		, width(400), height(400)
 		, dwStyle(WS_OVERLAPPEDWINDOW)
 		, szWindowTitle(NULL)
+		, hMainWnd(NULL)
+		, hMainDC(NULL)
 	{
 	}
 	bool Setup(HINSTANCE hInst)
@@ -74,9 +77,51 @@ public :
 
 		return true;
 	}
+	INT Run(void)
+	{
+		MSG msg;
+
+		DWORD dt = 1;
+		DWORD st = ::GetTickCount();
+
+		while (true)
+		{
+			InputDevice.Update(dt);
+
+			if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+			{
+				::TranslateMessage(&msg);
+				::DispatchMessage(&msg);
+			}
+			if (msg.message == WM_QUIT)
+				break;
+
+
+			Input(dt);
+			Update(dt);
+			Draw(dt);
+
+			dt = ::GetTickCount() - st;
+			st = ::GetTickCount();
+		}
+
+		return msg.wParam;
+	}
 	virtual void Input(DWORD tick) = 0;
 	virtual void Update(DWORD tick) = 0;
 	virtual void Draw(DWORD tick) = 0;
+
+protected :
+	virtual void Enter()
+	{
+	}
+	virtual void Leave()
+	{
+	}
+	void SetWindowStyle(DWORD style)
+	{
+		dwStyle = style;
+	}
 
 protected :
 	virtual void InitEventMap()
@@ -97,11 +142,25 @@ protected :
 	}
 	LRESULT OnCreate(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
+		backbuffer.Attach(hWnd);
+		backbuffer << RGB(255,255,255);
+
 		hMainWnd = hWnd;
+		hMainDC = ::GetDC(hWnd);
+		::GetClientRect(hWnd, &rcClient);
+
+		Enter();
+
 		return 0;
 	}
 	LRESULT OnDestroy(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
+		Leave();
+
+		::ReleaseDC(hWnd, hMainDC);
+
+		backbuffer.Detach();
+
 		::PostQuitMessage(0);
 		return 0;
 	}
@@ -149,4 +208,7 @@ private :
 
 protected :
 	HWND hMainWnd;
+	HDC hMainDC;
+	Rect rcClient;
+	DoubleBuffer backbuffer;
 };

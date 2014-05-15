@@ -28,6 +28,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "20140509", "20140509\201405
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameDev", "GameDev\GameDev.vcproj", "{374A0492-CFE9-4582-9F2C-2BC2899EB989}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "20140514", "20140514\20140514.vcproj", "{AD5BE563-A8FC-496A-836B-E691B6D968AA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{374A0492-CFE9-4582-9F2C-2BC2899EB989} = {374A0492-CFE9-4582-9F2C-2BC2899EB989}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -82,6 +87,10 @@ Global
 		{374A0492-CFE9-4582-9F2C-2BC2899EB989}.Debug|Win32.Build.0 = Debug|Win32
 		{374A0492-CFE9-4582-9F2C-2BC2899EB989}.Release|Win32.ActiveCfg = Release|Win32
 		{374A0492-CFE9-4582-9F2C-2BC2899EB989}.Release|Win32.Build.0 = Release|Win32
+		{AD5BE563-A8FC-496A-836B-E691B6D968AA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AD5BE563-A8FC-496A-836B-E691B6D968AA}.Debug|Win32.Build.0 = Debug|Win32
+		{AD5BE563-A8FC-496A-836B-E691B6D968AA}.Release|Win32.ActiveCfg = Release|Win32
+		{AD5BE563-A8FC-496A-836B-E691B6D968AA}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

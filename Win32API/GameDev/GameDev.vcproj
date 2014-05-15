@@ -210,6 +210,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\DoubleBuffer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\DoubleBuffer.h"
+					>
+				</File>
+				<File
 					RelativePath=".\InputDevice.cpp"
 					>
 				</File>
@@ -223,6 +231,18 @@
 				</File>
 				<File
 					RelativePath=".\Utility.hpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="control"
+				>
+				<File
+					RelativePath=".\Control.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Control.h"
 					>
 				</File>
 			</Filter>
