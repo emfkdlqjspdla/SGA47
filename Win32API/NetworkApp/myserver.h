@@ -47,7 +47,7 @@ public :
 		int iResult = 0;
 		int recvlen = recvbuffersize;
 
-		vector<clientinfo>::const_iterator it;
+		std::list<clientinfo>::const_iterator it;
 		for (it = getClientList().begin(); it != getClientList().end(); it++)
 		{
 			if (it->getSocket() == INVALID_SOCKET)

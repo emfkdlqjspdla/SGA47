@@ -2,8 +2,15 @@
 
 #pragma comment(lib, "../GameDev/GameDev.lib")
 
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif // WIN32_LEAN_AND_MEAN
+
+#include <windows.h>
+
 #include "../GameDev/GameDev.h"
 #include <process.h>
+#include <sstream>
 #include <list>
 #include "myserver.h"
 
@@ -24,7 +31,7 @@ public :
 			server->bind();
 
 			unsigned id;
-			HANDLE hThread = ::_beginthreadex(NULL, 0, &Me::proxy, this, 0, &id);
+			HANDLE hThread = (HANDLE)::_beginthreadex(NULL, 0, &Me::proxy, this, 0, &id);
 		}
 	}
 	void Update(DWORD)
@@ -46,7 +53,7 @@ public :
 		{
 			std::wostringstream oss;
 
-			oss << _T("ID : " ) << it->getId;
+			oss << _T("ID : " ) << it->getId();
 
 			::DrawText(backbuffer, oss.str().c_str(), -1, &box, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 			box = box >> Size(0, lineheight);

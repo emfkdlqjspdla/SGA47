@@ -91,7 +91,7 @@ public :
 		}
 
 		// result ...
-		std::clog << std::endl;
+		//std::clog << std::endl;
 		ai = result;
 
 		setSocket(::socket(ai->ai_family, ai->ai_socktype, ai->ai_protocol));

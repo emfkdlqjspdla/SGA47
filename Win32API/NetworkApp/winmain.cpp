@@ -6,7 +6,7 @@ INT WINAPI _tWinMain(HINSTANCE hInst,
 {
 	NetworkApp app;
 
-	app.Setup();
+	app.Setup(hInst);
 
 	return app.Run();
 }
