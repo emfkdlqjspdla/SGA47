@@ -11,8 +11,8 @@ Missile::Missile(const Point& pt, const LONG& r, const LONG& th)
 
 void Missile::Update(DWORD tick)
 {
-	center.x = center.x + 10*cos((90-theta)*D2R);
-	center.y = center.y - 10*sin((90-theta)*D2R);
+	center.x = center.x + 20*cos((90-theta)*D2R);
+	center.y = center.y - 20*sin((90-theta)*D2R);
 }
 void Missile::Draw(HDC hdc)
 {
