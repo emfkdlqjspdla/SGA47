@@ -50,7 +50,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		if ((::GetAsyncKeyState(VK_RIGHT) & 0x8000) == 0x8000)
 		{
 			current++;
-			if (current > CardList.size()-1)
+			if (current > int(CardList.size())-1)
 				current = CardList.size()-1;
 
 			Rect rc;
@@ -122,7 +122,7 @@ void DrawCard(HDC hdc, std::list<Image*>& depot, const Rect& rc, const int& curr
 			DrawCard(hdc, depot, rcLeft, current-1, center, alpha*2/3);
 	}
 
-	if (current+1 > center && current + 1 < depot.size())
+	if (current+1 > center && current + 1 < int(depot.size()))
 	{
 		if (alpha*2/3 > 0)
 			DrawCard(hdc, depot, rcRight, current+1, center, alpha*2/3);

@@ -35,14 +35,14 @@ void Tank::Input(DWORD tick)
 		}
 		if (InputDevice[VK_UP])
 		{
-			center.x = center.x + 5*cos((90-theta)*D2R);
-			center.y = center.y - 5*sin((90-theta)*D2R);
+			center.x = LONG(center.x + 5*cos((90-theta)*D2R));
+			center.y = LONG(center.y - 5*sin((90-theta)*D2R));
 			//center.y -= 5;
 		}
 		if (InputDevice[VK_DOWN])
 		{
-			center.x = center.x - 5*cos((90-theta)*D2R);
-			center.y = center.y + 5*sin((90-theta)*D2R);
+			center.x = LONG(center.x - 5*cos((90-theta)*D2R));
+			center.y = LONG(center.y + 5*sin((90-theta)*D2R));
 			//center.y += 5;
 		}
 		if (InputDevice[VK_SPACE])
@@ -62,8 +62,8 @@ void Tank::Update(DWORD tick)
 	if (update_dt > update_delay)
 	{
 
-		last.x = center.x + length*cos((90-theta)*D2R);
-		last.y = center.y - length*sin((90-theta)*D2R);
+		last.x = LONG(center.x + length*cos((90-theta)*D2R));
+		last.y = LONG(center.y - length*sin((90-theta)*D2R));
 
 		MissileList::iterator it;
 		for (it = MissileDepot.begin();

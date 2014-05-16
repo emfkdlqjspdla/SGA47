@@ -45,11 +45,11 @@ Size operator * (const Size& obj, const LONG& v)
 }
 Size operator * (const float& v, const Size& obj)
 {
-	return Size(obj.cx*v, obj.cy*v);
+	return Size(LONG(obj.cx*v), LONG(obj.cy*v));
 }
 Size operator * (const Size& obj, const float& v)
 {
-	return Size(obj.cx*v, obj.cy*v);
+	return Size(LONG(obj.cx*v), LONG(obj.cy*v));
 }
 
 Rect::Rect(const LONG& l/*=0*/, const LONG& t/*=0*/, const LONG& r/*=0*/, const LONG& b/*=0*/)

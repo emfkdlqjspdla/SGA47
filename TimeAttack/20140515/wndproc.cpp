@@ -55,7 +55,7 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 			x = rc.right;
 
 		pt.x = x+1;
-		pt.y = rc.height()*0.4 * sin(theta*D2R) + rc.height()/2;
+		pt.y = LONG(rc.height()*0.4 * sin(theta*D2R) + rc.height()/2);
 
 		theta += 10;
 

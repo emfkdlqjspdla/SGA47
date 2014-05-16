@@ -179,6 +179,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BoxManager.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\InputDevice.cpp"
 				>
 			</File>
@@ -202,6 +206,10 @@
 			</File>
 			<File
 				RelativePath=".\Box.h"
+				>
+			</File>
+			<File
+				RelativePath=".\BoxManager.h"
 				>
 			</File>
 			<File

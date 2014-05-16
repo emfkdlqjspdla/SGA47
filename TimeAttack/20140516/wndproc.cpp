@@ -47,13 +47,8 @@ LRESULT CALLBACK WndProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 		for (it = boxlist.begin();
 			it != boxlist.end(); it++)
 		{
-			Rect rcBox = (*it)->GetDrawRect();
 			Rect tmp;
 			if (::IntersectRect(&tmp, &rc, &((*it)->GetDrawRect())))
-			//if (!(rc.left > rcBox.right ||
-			//	rc.right < rcBox.left ||
-			//	rc.top > rcBox.bottom ||
-			//	rc.bottom < rcBox.top))
 			{
 				(*it)->Draw(hdc);
 				DrawCount++;

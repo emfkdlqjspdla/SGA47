@@ -32,8 +32,8 @@ void Star::Update(DWORD tick)
 
 		for (int i = 0; i < count; i++)
 		{
-			pos.x = pos.x + speed*cos((90-theta)*D2R);
-			pos.y = pos.y - speed*sin((90-theta)*D2R);
+			pos.x = LONG(pos.x + speed*cos((90-theta)*D2R));
+			pos.y = LONG(pos.y - speed*sin((90-theta)*D2R));
 
 			alpha = alpha*9/10;
 
