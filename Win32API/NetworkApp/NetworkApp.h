@@ -20,15 +20,15 @@ class NetworkApp : public MainWindow<NetworkApp>
 	typedef MainWindow<NetworkApp> Base;
 public :
 	NetworkApp()
-		: server(NULL)
+		: Server(NULL)
 	{}
 	void Input(DWORD)
 	{
 		if (InputDevice[VK_LBUTTON])
 		{
-			server = new myserver("8887");
-			server->createsocket("8887");
-			server->bind();
+			Server = new myserver("8887");
+			Server->createsocket("8887");
+			Server->bind();
 
 			unsigned id;
 			HANDLE hThread = (HANDLE)::_beginthreadex(NULL, 0, &Me::proxy, this, 0, &id);
@@ -71,11 +71,11 @@ public :
 
 	void listen()
 	{
-		while (server->listen() == 0)
+		while (Server->listen() == 0)
 		{
-			if (server->accept())
+			if (Server->accept())
 			{
-				clientList = server->getClientList();
+				clientList = Server->getClientList();
 			}
 		}
 	}
@@ -96,6 +96,6 @@ protected :
 
 	}
 private :
-	myserver* server;
+	myserver* Server;
 	std::list<clientinfo> clientList;
 };

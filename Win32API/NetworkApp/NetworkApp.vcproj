@@ -181,6 +181,14 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\myclient.h"
+				>
+			</File>
+			<File
+				RelativePath=".\myserver.h"
+				>
+			</File>
+			<File
 				RelativePath=".\NetworkApp.h"
 				>
 			</File>
@@ -195,19 +203,11 @@
 			Name="Network"
 			>
 			<File
-				RelativePath=".\client.h"
+				RelativePath=".\Client.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\myclient.h"
-				>
-			</File>
-			<File
-				RelativePath=".\myserver.h"
-				>
-			</File>
-			<File
-				RelativePath=".\network.h"
+				RelativePath=".\Client.h"
 				>
 			</File>
 			<File
@@ -215,7 +215,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\server.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\server.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Socket.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Socket.h"
 				>
 			</File>
 		</Filter>

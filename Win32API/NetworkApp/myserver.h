@@ -1,13 +1,13 @@
 #pragma once
 
-#include "server.h"
+#include "Server.h"
 #include "packet.h"
 
-class myserver : public server
+class myserver : public Server
 {
 public :
 	myserver(const char* _szPort = NULL)
-		: server(_szPort)
+		: Server(_szPort)
 		, recvbuffersize(512)
 	{
 	}

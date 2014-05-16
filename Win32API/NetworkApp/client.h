@@ -1,8 +1,8 @@
 #pragma once
 
-#include "network.h"
+#include "Socket.h"
 
-class client : public network
+class client : public socket
 {
 public :
 	client(const char* _szServer = NULL, const char* _szPort = NULL)
@@ -72,7 +72,7 @@ public :
 
 			if (getSocket() == INVALID_SOCKET)
 			{
-				//std::cerr << "Unable to connect to server" << std::endl;
+				//std::cerr << "Unable to connect to Server" << std::endl;
 
 				release();
 			}
