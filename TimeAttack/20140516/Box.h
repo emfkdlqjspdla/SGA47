@@ -9,7 +9,7 @@ class Box
 {
 public :
 	Box();
-	~Box();
+	virtual ~Box();
 	void Attach(HWND hWnd);
 
 	void Input(DWORD);
