@@ -151,15 +151,7 @@ void BoxManager::Draw(HDC hdc)
 		for (jt = rGList.begin(); jt != rGList.end(); jt++)
 		{
 			SubList& rSList = (*jt);
-			SubList::iterator kt;
-			for (kt = rSList.begin(); kt != rSList.end(); kt++)
-			{
-				Rect tmp;
-				if (::IntersectRect(&tmp, &rc, &((*kt)->GetDrawRect())))
-				{
-					(*kt)->Draw(hdc);
-				}
-			}
+			DrawReverse(hdc, (*jt));
 		}
 	}
 }
@@ -202,4 +194,23 @@ void BoxManager::AddSub(const int& Where, const int& Order, element* pElement)
 	pElement->SetDrawRect(pElement->GetDrawRect()>>Size(5*size,5*size));
 
 	rSList.push_back(pElement);
+}
+void BoxManager::DrawReverse(HDC hdc, SubList& sl)
+{
+	Rect rc;
+	::GetClientRect(hOwner, &rc);
+
+	SubList::iterator it;
+	int size = sl.size();
+	for (int i = 0; i < size; i++)
+	{
+		it = sl.begin();
+		std::advance(it, size - i - 1);
+
+		Rect tmp;
+		if (::IntersectRect(&tmp, &rc, &((*it)->GetDrawRect())))
+		{
+			(*it)->Draw(hdc);
+		}
+	}
 }

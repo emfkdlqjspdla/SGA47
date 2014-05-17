@@ -43,6 +43,7 @@ public :
 private :
 	void AddGrade(const int& Where, element* pElement);
 	void AddSub(const int& Where, const int& Order, element* pElement);
+	void DrawReverse(HDC, SubList& sl);
 private :
 	HWND hOwner;
 
