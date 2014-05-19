@@ -51,6 +51,7 @@ struct Rect : public RECT
 struct Color
 {
 	Color(const COLORREF& _clr = RGB(255,255,255));
+	Color(const BYTE& r, const BYTE& g, const BYTE& b);
 	Color(const char* szColor);
 
 	int c2d(const char& c);
@@ -61,6 +62,15 @@ struct Color
 	Color operator ++ (int);
 	Color& operator -- ();
 	Color operator -- (int);
+	Color operator ! ();
+	Color operator - (const Color& o) const;
+	Color operator - (const BYTE& byte) const;
+	Color operator + (const Color& o) const;
+	Color operator + (const BYTE& byte) const;
+	bool operator == (const Color& o) const;
+	bool operator != (const Color& o) const;
+	Color operator / (const int i) const;
+	Color operator >> (const Color& o) const;
 
 	COLORREF clr;
 	BYTE diff;
