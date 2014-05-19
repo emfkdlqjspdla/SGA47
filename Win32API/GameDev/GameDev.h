@@ -11,5 +11,7 @@
 #include "Utility.hpp"
 #include "InputDevice.h"
 #include "MainWindow.hpp"
+#include "Logger.h"
 #include "DoubleBuffer.h"
 #include "Control.h"
+#include "Sound.h"

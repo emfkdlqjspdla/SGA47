@@ -75,8 +75,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="GameDev Library 를 복사하고 있습니다."
-				CommandLine="copy /y &quot;$(TargetPath)&quot; &quot;$(ProjectDir)&quot;"
+				Description="GameDev Library 를 복사하고 있습니다. fmodex.dll 파일을 복사하고 있습니다."
+				CommandLine="copy /y &quot;$(TargetPath)&quot; &quot;$(ProjectDir)&quot;&#x0D;&#x0A;copy /y &quot;fmod\fmodex.dll&quot; &quot;$(OutDir)&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -226,7 +226,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Logger.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Logger.h"
+					>
+				</File>
+				<File
 					RelativePath=".\MainWindow.hpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Manager.hpp"
 					>
 				</File>
 				<File
@@ -249,6 +261,18 @@
 			<Filter
 				Name="Graphic"
 				>
+			</Filter>
+			<Filter
+				Name="Sound"
+				>
+				<File
+					RelativePath=".\Sound.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Sound.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>
