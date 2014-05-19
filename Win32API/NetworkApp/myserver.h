@@ -82,7 +82,6 @@ public :
 				::closesocket((*it)->getSocket());
 				
 				release();
-
 			}
 		}
 

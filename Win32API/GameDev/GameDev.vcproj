@@ -250,6 +250,14 @@
 				Name="control"
 				>
 				<File
+					RelativePath=".\Button.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Button.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Control.cpp"
 					>
 				</File>

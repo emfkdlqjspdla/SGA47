@@ -64,12 +64,6 @@ public :
 	{
 	}
 
-	void seterrbuf(std::basic_streambuf<char>* errbuf)
-	{
-		std::cerr.rdbuf(errbuf);
-		std::clog.rdbuf(errbuf);
-		std::cout.rdbuf(errbuf);
-	}
 	int createsocket(const char* _szPort = NULL) throw(...)
 	{
 		setport(_szPort);

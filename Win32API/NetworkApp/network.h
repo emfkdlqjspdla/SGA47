@@ -23,6 +23,13 @@ public :
 	{
 	}
 
+	void seterrbuf(std::basic_streambuf<char>* errbuf)
+	{
+		std::cerr.rdbuf(errbuf);
+		std::clog.rdbuf(errbuf);
+		std::cout.rdbuf(errbuf);
+	}
+
 	// initialize winsock
 	int initialize(void)
 	{

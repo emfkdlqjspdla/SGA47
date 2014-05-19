@@ -11,6 +11,7 @@
 #include "../GameDev/GameDev.h"
 #include <process.h>
 #include <sstream>
+#include <string>
 #include <list>
 #include "myserver.h"
 
@@ -18,6 +19,8 @@ class NetworkApp : public MainWindow<NetworkApp>
 {
 	typedef NetworkApp Me;
 	typedef MainWindow<NetworkApp> Base;
+
+	typedef std::list<Control*> ControlListType;
 public :
 	NetworkApp()
 		: Server(NULL)
@@ -28,11 +31,21 @@ public :
 	{
 		Log << "NetworkApp End." << std::endl;
 	}
-	void Input(DWORD)
+	void Input(DWORD tick)
 	{
+		ControlListType::iterator it;
+		for (it = ControlList.begin(); it != ControlList.end(); it++)
+		{
+			(*it)->Input(tick);
+		}
 	}
-	void Update(DWORD)
+	void Update(DWORD tick)
 	{
+		ControlListType::iterator it;
+		for (it = ControlList.begin(); it != ControlList.end(); it++)
+		{
+			(*it)->Update(tick);
+		}
 	}
 	void Draw(DWORD)
 	{
@@ -56,11 +69,34 @@ public :
 			box = box >> Size(0, lineheight);
 		}
 
+		ControlListType::iterator cit;
+		for (cit = ControlList.begin(); cit != ControlList.end(); cit++)
+		{
+			(*cit)->Draw(backbuffer);
+		}
+
+
 		backbuffer.Draw();
 	}
 
 	void Enter()
 	{
+		Control* pControl;
+		
+		for (int i = 0; i < 3; i++)
+		{
+			pControl = new Button;
+			pControl->Attach(hMainWnd);
+
+			std::wostringstream oss;
+			oss << i << _T(" Button");
+
+			dynamic_cast<Button*>(pControl)->SetButtonText(oss.str().c_str());
+			dynamic_cast<Button*>(pControl)->SetDrawRect(Rect(0,0,100,50)>>Size(50,50)>>Size(101*i, 0));
+			dynamic_cast<Button*>(pControl)->SetStateColor(Color("aaaaaa"), Color("FF5555"), Color("007FFF"));
+			ControlList.push_back(pControl);
+		}
+
 		Log << "Enter in." << std::endl;
 
 		::InitializeCriticalSection(&cs);
@@ -74,6 +110,13 @@ public :
 	}
 	void Leave()
 	{
+		ControlListType::iterator it;
+		for (it = ControlList.begin(); it != ControlList.end();)
+		{
+			delete (*it);
+			it = ControlList.erase(it);
+		}
+
 		::DeleteCriticalSection(&cs);
 	}
 
@@ -108,6 +151,8 @@ public :
 
 			Log << "while out." << std::endl;
 		}
+
+		Log << "listen End." << std::endl;
 	}
 
 	static unsigned int __stdcall proxy(void* arg)
@@ -118,18 +163,32 @@ public :
 
 		pThis->listen();
 
+		Log << "proxy End." << std::endl;
+
 		return 0;
 	}
 
 protected :
-	//void InitEventMap()
-	//{
-	//	Base::InitEventMap();
+	void InitEventMap()
+	{
+		Base::InitEventMap();
 
-	//}
+		SetEventHandler(WM_BUTTON_CLICK, &Me::OnButtonClick);
+	}
+	LRESULT OnButtonClick(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	{
+		std::wostringstream oss;
+		oss << wParam << _T(" Button Click");
+
+		::MessageBox(hWnd, oss.str().c_str(), _T("Confirm"), MB_OK);
+
+		return 0;
+	}
 private :
 	myserver* Server;
 	std::list<clientinfo*> clientList;
 
 	CRITICAL_SECTION cs;
+
+	ControlListType ControlList;
 };
