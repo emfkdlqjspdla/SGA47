@@ -13,7 +13,6 @@
 #include <sstream>
 #include <list>
 #include "myserver.h"
-#include "logger.h"
 
 class NetworkApp : public MainWindow<NetworkApp>
 {
