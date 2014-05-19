@@ -24,6 +24,8 @@ public :
 		, hMainDC(NULL)
 	{
 	}
+	virtual ~MainWindow()
+	{}
 	bool Setup(HINSTANCE hInst)
 	{
 		WNDCLASSEX wcex;

@@ -6,8 +6,8 @@ template<typename T>
 class singleton
 {
 protected :
-	singleton(){}
-	virtual ~singleton(){}
+	singleton(){::InitializeCriticalSection(&cs);}
+	virtual ~singleton(){::DeleteCriticalSection(&cs);}
 
 public :
 	static T& getReference()
@@ -15,6 +15,9 @@ public :
 		static T inst;
 		return inst;
 	}
+
+protected :
+	CRITICAL_SECTION cs;
 };
 
 template<typename GDIObject>
