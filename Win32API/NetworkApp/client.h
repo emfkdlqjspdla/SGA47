@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Socket.h"
+#include "network.h"
 
-class client : public socket
+class client : public network
 {
 public :
 	client(const char* _szServer = NULL, const char* _szPort = NULL)
@@ -31,7 +31,7 @@ public :
 		iResult = ::getaddrinfo(serveraddr, port, &hints, &result);
 		if (iResult != 0)
 		{
-			//std::cerr << "getaddrinfo failed : " << iResult << std::endl;
+			std::cerr << "getaddrinfo failed : " << iResult << std::endl;
 
 			release();
 
@@ -39,13 +39,13 @@ public :
 		}
 
 		// result ...
-		//std::clog << std::endl;
+		std::clog << std::endl;
 		ai = result;
 
 		setSocket(::socket(ai->ai_family, ai->ai_socktype, ai->ai_protocol));
 		if (getSocket() == INVALID_SOCKET)
 		{
-			//std::cerr << "Error at socket() : " << ::WSAGetLastError() << std::endl;
+			std::cerr << "Error at socket() : " << ::WSAGetLastError() << std::endl;
 			::freeaddrinfo(ai);
 
 			release();
@@ -53,7 +53,7 @@ public :
 			return 2;
 		}
 
-		//std::clog << "createsocket success" << std::endl;
+		std::clog << "createsocket success" << std::endl;
 		// successful result..
 		return 0;
 	}
@@ -72,7 +72,7 @@ public :
 
 			if (getSocket() == INVALID_SOCKET)
 			{
-				//std::cerr << "Unable to connect to Server" << std::endl;
+				std::cerr << "Unable to connect to server" << std::endl;
 
 				release();
 			}
@@ -80,7 +80,7 @@ public :
 			return 1;
 		}
 
-		//std::clog << "connect success" << std::endl;
+		std::clog << "connect success" << std::endl;
 		// successful result..
 		return 0;
 	}
@@ -91,14 +91,14 @@ public :
 		iResult = ::shutdown(getSocket(), SD_SEND);
 		if (iResult == SOCKET_ERROR)
 		{
-			//std::cerr << "shutdown failed : " << ::WSAGetLastError() << std::endl;
+			std::cerr << "shutdown failed : " << ::WSAGetLastError() << std::endl;
 			::closesocket(getSocket());
 			release();
 
 			return 1;
 		}
 
-		//std::clog << "close success" << std::endl;
+		std::clog << "close success" << std::endl;
 		return 0;
 	}
 
