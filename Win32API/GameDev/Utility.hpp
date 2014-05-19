@@ -46,6 +46,7 @@ CharType* strAlloc(CharType* & dest, const CharType* & src)
 
 	dest = new CharType[i];
 
+	i = 0;
 	while (dest[i++] = src[i]);
 
 	return dest;
