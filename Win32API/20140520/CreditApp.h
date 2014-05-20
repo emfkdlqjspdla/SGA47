@@ -21,6 +21,14 @@ public :
 	}
 	void Input(DWORD)
 	{
+		if (InputDevice.OnClick(VK_RBUTTON))
+		{
+			if (bgSound.IsPlaying())
+				bgSound.Stop();
+			else
+				bgSound.Play();
+		}
+
 	}
 	void Update(DWORD tick)
 	{
@@ -61,17 +69,35 @@ public :
 protected :
 	void Enter()
 	{
+		Log << "Enter in." << std::endl;
 		//::strAlloc(szText[0], _T("만든이"));
 		//::strAlloc(szText[1], _T("Lim Jong Kyu"));
+
+		Log << "Sound File Loading s" << std::endl;
+
+		bgSound.Load("bgsound1.mp3");
+		bgSound.SetLoop();
+		bgSound.SetLoopRange(20000, 25000);
+		bgSound.Play();
+
+		Log << "Sound File Loading e" << std::endl;
 
 		rcText[0] = rcClient;
 		rcText[0].top = rcClient.bottom;
 		rcText[0].bottom = rcText[0].top + lineheight;
 
 		rcText[1] = rcText[0]>>Size(0,lineheight);
+
+		Log << rcText[0].left << "," << std::endl;
+		Log << rcText[0].top << ","
+			<< rcText[0].right << ","
+			<< rcText[0].bottom << std::endl;
+
+		Log << "Enter out." << std::endl;
 	}
 	void Leave()
 	{
+		bgSound.Stop();
 		//for (int i = 0; i < 2; i++)
 		//	::SafeDelete(szText[i]);
 	}
@@ -83,4 +109,6 @@ private :
 
 	DWORD update_dt;
 	DWORD update_delay;
+
+	Sound bgSound;
 };

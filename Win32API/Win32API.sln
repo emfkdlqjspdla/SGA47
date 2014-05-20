@@ -41,6 +41,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetworkApp", "NetworkApp\Ne
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "20140520", "20140520\20140520.vcproj", "{8458ACC2-2394-453B-B91E-AB0FEB3446E2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{374A0492-CFE9-4582-9F2C-2BC2899EB989} = {374A0492-CFE9-4582-9F2C-2BC2899EB989}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
