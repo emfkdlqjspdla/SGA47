@@ -10,11 +10,14 @@
 
 class TodayApp : public MainWindow<TodayApp>
 {
+	typedef TodayApp Me;
+	typedef MainWindow<TodayApp> Base;
 public :
 	TodayApp()
 		: update_dt(0), update_delay(100)
 		, imgIndex(0)
 	{
+		//SetWindowStyle(WS_POPUP | WS_SYSMENU );
 	}
 	void Input(DWORD)
 	{
@@ -84,6 +87,18 @@ protected :
 	}
 	void Leave()
 	{
+	}
+	void InitEventMap()
+	{
+		Base::InitEventMap();
+
+		SetEventHandler(WM_KEYDOWN, &Me::OnKeyDown);
+	}
+	LRESULT OnKeyDown(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+	{
+		// TODO
+
+		return 0;
 	}
 
 private :
