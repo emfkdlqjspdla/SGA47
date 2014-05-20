@@ -40,6 +40,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetworkApp", "NetworkApp\Ne
 		{374A0492-CFE9-4582-9F2C-2BC2899EB989} = {374A0492-CFE9-4582-9F2C-2BC2899EB989}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "20140520", "20140520\20140520.vcproj", "{8458ACC2-2394-453B-B91E-AB0FEB3446E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -106,6 +108,10 @@ Global
 		{EBAB5723-183F-44AA-864E-7AB03FD2E22F}.Debug|Win32.Build.0 = Debug|Win32
 		{EBAB5723-183F-44AA-864E-7AB03FD2E22F}.Release|Win32.ActiveCfg = Release|Win32
 		{EBAB5723-183F-44AA-864E-7AB03FD2E22F}.Release|Win32.Build.0 = Release|Win32
+		{8458ACC2-2394-453B-B91E-AB0FEB3446E2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8458ACC2-2394-453B-B91E-AB0FEB3446E2}.Debug|Win32.Build.0 = Debug|Win32
+		{8458ACC2-2394-453B-B91E-AB0FEB3446E2}.Release|Win32.ActiveCfg = Release|Win32
+		{8458ACC2-2394-453B-B91E-AB0FEB3446E2}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
