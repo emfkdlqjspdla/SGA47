@@ -1,9 +1,12 @@
 ﻿#pragma once
 
+#pragma comment(lib, "../GameDev/GameDev.lib")
+
+#include "../GameDev/GameDev.h"
+
 #include <windows.h>
 #include <tchar.h>
-#include "BaseType.h"
-#include "InputDevice.h"
+//#include "BaseType.h"
 
 enum cursor_id
 {
@@ -49,4 +52,10 @@ private :
 	bool bClipMouse;
 	Size sBitmap;
 	Size sGray;
+
+	int dx;
+	int diff;
+
+	DWORD update_dt;
+	DWORD update_delay;
 };

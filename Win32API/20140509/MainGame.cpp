@@ -8,6 +8,7 @@ MainGame::MainGame()
 , hOldMemBitmap(NULL)
 , st(0)
 , dt(0)
+, dx(0), update_dt(0), update_delay(50), diff(10)
 {
 	for (int i = 0; i < CURSOR_MAX; i++)
 	{
@@ -44,7 +45,7 @@ void MainGame::Input(DWORD tick)
 		ptMouse = ptMouse.ToClient(hOwner);
 	}
 
-	if (InputDevice[VK_ESCAPE])
+	if (InputDevice.OnClick(VK_ESCAPE))
 	{
 		bClipMouse = !bClipMouse;
 		if (bClipMouse)
@@ -61,9 +62,29 @@ void MainGame::Input(DWORD tick)
 			::ShowCursor(TRUE);
 		}
 	}
+
+	if (InputDevice.OnClick(VK_ADD))
+	{
+		diff++;
+	}
+	else if (InputDevice.OnClick(VK_SUBTRACT))
+	{
+		diff--;
+	}
 }
 void MainGame::Update(DWORD tick)
 {
+	if (update_dt > update_delay)
+	{
+		dx += diff;
+		if (dx > sBitmap.cx)
+			dx = 0;
+
+		update_dt -= update_delay;
+	}
+
+	update_dt += tick;
+
 	if (bClipMouse)
 	{
 		const int margin = 10;
@@ -83,18 +104,18 @@ void MainGame::Draw(void)
 	Rect rc;
 	::GetClientRect(hOwner, &rc);
 
-	::SetDCBrushColor(hMemDC, RGB(1,1,1));
-	::FillRect(hMemDC, &rc, (HBRUSH)::GetStockObject(DC_BRUSH));
+	//::SetDCBrushColor(hMemDC, RGB(1,1,1));
+	//::FillRect(hMemDC, &rc, (HBRUSH)::GetStockObject(DC_BRUSH));
 
 	HDC hBlockDC = ::CreateCompatibleDC(hMemDC);
 	HBITMAP hOldBitmap = (HBITMAP)::SelectObject(hBlockDC, hBlock);
 
 	for (int y = 0; y < rc.height(); y += sBitmap.cy)
 	{
-		for (int x = 0; x < rc.width(); x += sBitmap.cx)
+		for (int x = dx - sBitmap.cx; x < rc.width(); x += sBitmap.cx)
 		{
-			::BitBlt(hMemDC, x, y, sBitmap.cx, sBitmap.cy,
-				hBlockDC, 0, 0, SRCCOPY);
+			::GdiTransparentBlt(hMemDC, x, y, sBitmap.cx, sBitmap.cy,
+				hBlockDC, 0, 0, sBitmap.cx, sBitmap.cy, RGB(0,0,0));
 		}
 	}
 
@@ -170,7 +191,7 @@ void MainGame::Load(void)
 	Rect rcTemp(0,0,100,100);
 	for (int i = 0; i < CURSOR_MAX; i++)
 	{
-		rcSample[i] = rcTemp >> (Size(100, 0)*i);
+		rcSample[i] = rcTemp >> (Size(100, 0)*LONG(i));
 	}
 
 	ptMouse = Point(rc.width()/2, rc.height()/2);
