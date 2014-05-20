@@ -37,7 +37,7 @@ void SafeDelete(T& pointer)
 }
 
 template<typename CharType>
-CharType* strAlloc(CharType* & dest, const CharType* & src)
+CharType* strAlloc(CharType* & dest, const CharType* const src)
 {
 	SafeDelete(dest);
 
