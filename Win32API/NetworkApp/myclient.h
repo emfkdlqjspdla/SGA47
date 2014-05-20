@@ -32,7 +32,7 @@ public :
 		//iResult = ::send(getSocket(), (const char*)&for_send, *(int*)(unsigned short*)for_send.cbSize, 0);
 		if (iResult == SOCKET_ERROR)
 		{
-			//std::cerr << "send failed : " << ::WSAGetLastError() << std::endl;
+			std::cerr << "send failed : " << ::WSAGetLastError() << std::endl;
 
 			::closesocket(getSocket());
 			release();
@@ -40,7 +40,8 @@ public :
 			return 1;
 		}
 
-		//std::clog << "Sent : " << iResult << std::endl;
+		std::clog << "Sent : " << iResult << std::endl;
+
 
 		return 0;
 	}
@@ -49,7 +50,7 @@ public :
 	{
 		if (getSocket() == INVALID_SOCKET)
 		{
-			//std::cerr << "Could not use socket for recv." << std::endl;
+			std::cerr << "Could not use socket for recv." << std::endl;
 			return 2;
 		}
 
@@ -59,15 +60,15 @@ public :
 		iResult = ::recv(getSocket(), (char*)&for_recv, recvlen, 0);
 		if (iResult > 0)
 		{
-			//std::clog << "Received : " << iResult << std::endl;
+			std::clog << "Received : " << iResult << std::endl;
 		}
 		else if (iResult == 0)
 		{
-			//std::clog << "Connection closed." << std::endl;
+			std::clog << "Connection closed." << std::endl;
 		}
 		else
 		{
-			//std::clog << "recv failed : " << ::WSAGetLastError() << std::endl;
+			std::clog << "recv failed : " << ::WSAGetLastError() << std::endl;
 		}
 
 		return 0;

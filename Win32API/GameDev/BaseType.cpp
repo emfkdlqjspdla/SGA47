@@ -149,6 +149,10 @@ Color::Color(const COLORREF& _clr/* = RGB(255,255,255)*/)
 : clr(_clr), diff(10)
 {
 }
+Color::Color(const BYTE& r, const BYTE& g, const BYTE& b)
+: clr(RGB(r,g,b)), diff(10)
+{
+}
 Color::Color(const char* szColor)
 : diff(10)
 {
@@ -214,4 +218,113 @@ Color Color::operator -- (int)
 	--(*this);
 
 	return tmp;
+}
+Color Color::operator ! ()
+{
+	BYTE r = GetRValue(clr);
+	BYTE g = GetGValue(clr);
+	BYTE b = GetBValue(clr);
+
+	return Color(255-r, 255-g, 255-b);
+}
+Color Color::operator - (const Color& o) const
+{
+	BYTE r = GetRValue(clr);
+	BYTE g = GetGValue(clr);
+	BYTE b = GetBValue(clr);
+
+	BYTE ro = GetRValue(o.clr);
+	BYTE go = GetGValue(o.clr);
+	BYTE bo = GetBValue(o.clr);
+
+	return Color(max(0, r-ro),max(0, g-go),max(0, b-bo));
+}
+Color Color::operator - (const BYTE& byte) const
+{
+	return Color(max(0,GetRValue(clr)-byte), max(0,GetGValue(clr)-byte), max(0,GetBValue(clr)-byte));
+}
+Color Color::operator + (const Color& o) const
+{
+	BYTE r = GetRValue(clr);
+	BYTE g = GetGValue(clr);
+	BYTE b = GetBValue(clr);
+
+	BYTE ro = GetRValue(o.clr);
+	BYTE go = GetGValue(o.clr);
+	BYTE bo = GetBValue(o.clr);
+
+	return Color(min(255, r+ro),min(255, g+go),min(255, b+bo));
+}
+Color Color::operator + (const BYTE& byte) const
+{
+	return Color(min(255,GetRValue(clr)+byte), min(255,GetGValue(clr)+byte), min(255,GetBValue(clr)+byte));
+}
+bool Color::operator == (const Color& o) const
+{
+	return (clr == o.clr);
+}
+bool Color::operator != (const Color& o) const
+{
+	return (clr != o.clr);
+}
+Color Color::operator / (const int i) const
+{
+	return Color(GetRValue(clr)/i, GetGValue(clr)/i, GetBValue(clr)/i);
+}
+Color Color::operator >> (const Color& o) const
+{
+	BYTE r = GetRValue(clr);
+	BYTE g = GetGValue(clr);
+	BYTE b = GetBValue(clr);
+
+	BYTE ro = GetRValue(o.clr);
+	BYTE go = GetGValue(o.clr);
+	BYTE bo = GetBValue(o.clr);
+
+	if (r > ro)
+	{
+		if (r-ro < 10)
+			r = ro;
+		else
+			r -= (r-ro)/10;
+	}
+	else if (r < ro)
+	{
+		if (ro-r < 10)
+			r = ro;
+		else
+			r += (ro-r)/10;
+	}
+
+	if (g > go)
+	{
+		if (g-go < 10)
+			g = go;
+		else
+			g -= (g-go)/10;
+	}
+	else if (g < go)
+	{
+		if (go-g < 10)
+			g = go;
+		else
+			g += (go-g)/10;
+	}
+
+	if (b > bo)
+	{
+		if (b-bo < 10)
+			b = bo;
+		else
+			b -= (b-bo)/10;
+	}
+	else if (b < bo)
+	{
+		if (bo-b < 10)
+			b = bo;
+		else
+			b += (bo-b)/10;
+	}
+
+	return Color(r,g,b);
 }

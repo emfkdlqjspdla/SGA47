@@ -8,6 +8,7 @@
 #include "BaseType.h"
 #include "InputDevice.h"
 #include "Box.h"
+#include "BoxManager.h"
 
 LRESULT CALLBACK WndProc(HWND,UINT,WPARAM,LPARAM);
 

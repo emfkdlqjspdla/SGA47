@@ -24,6 +24,10 @@ public :
 		, hMainDC(NULL)
 	{
 	}
+	virtual ~MainWindow()
+	{
+		::SafeDelete(szWindowTitle);
+	}
 	bool Setup(HINSTANCE hInst)
 	{
 		WNDCLASSEX wcex;
@@ -57,7 +61,7 @@ public :
 
 		HWND hWnd = ::CreateWindowEx(0, 
 					szClassName, 
-					_T("Win32 Sample"),
+					((szWindowTitle)? szWindowTitle : _T("Win32 Sample")),
 					dwStyle, 
 					x, y,
 					width, height,
@@ -121,6 +125,15 @@ protected :
 	void SetWindowStyle(DWORD style)
 	{
 		dwStyle = style;
+	}
+	void SetWindowTitle(LPCTSTR szTitle)
+	{
+		::strAlloc(szWindowTitle, szTitle);
+	}
+	void SetWindowSize(const int& w, const int& h)
+	{
+		width = w;
+		height = h;
 	}
 
 protected :
